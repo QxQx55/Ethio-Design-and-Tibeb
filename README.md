@@ -1,120 +1,55 @@
-# React + Vite + shadcn/ui Starter Template
+# Wondayheu Gift Shop
 
-A modern React starter template built with Vite, TypeScript, Tailwind CSS, and shadcn/ui components.
+A luxury gift storefront built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui and Supabase.
 
-## 🚀 Features
+## Features
 
-- ⚡️ **Vite** - Fast build tool and development server
-- ⚛️ **React 18** - Latest React with hooks support
-- 🎯 **TypeScript** - Type safety and better developer experience
-- 🎨 **Tailwind CSS** - Utility-first CSS framework
-- 🧩 **shadcn/ui** - Beautifully designed components built with Radix UI
-- 📦 **Path Mapping** - Clean imports with `@/` prefix
+- Curated product catalog with search, category/event filters, price range and sorting
+- Shopping cart and quick product views
+- Customer, staff and admin dashboards with Supabase auth and realtime updates
+- Offline showcase: if the catalog cannot be reached, the shop displays a local sample collection with a retry option instead of an error screen
 
-## 📦 Included shadcn/ui Components
+## Getting started
 
-- Button
-- Card
-- Input
-- Label
-- Badge
-- Dialog
-- And more...
+```bash
+npm install
+npm run dev
+```
 
-## 🛠️ Getting Started
+The dev server runs on port 3000.
 
-1. **Install dependencies**
+## Configuration
 
-   ```bash
-   npm install
-   ```
+Copy `.env.example` to `.env.local` and point it at your own Supabase project:
 
-2. **Start development server**
+```bash
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
 
-   ```bash
-   npm run dev
-   ```
+The anon key is safe to expose in the browser; row-level security in Supabase controls what it can access. Without configuration, the app falls back to built-in demo credentials and, if those are unreachable, to the offline showcase data in `src/data.ts`.
 
-3. **Build for production**
+## Scripts
 
-   ```bash
-   npm run build
-   ```
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview the production build |
+| `npm run typecheck` | Run TypeScript checks |
+| `npm run lint` | Run ESLint |
 
-4. **Preview production build**
-   ```bash
-   npm run preview
-   ```
-
-## 📁 Project Structure
+## Project structure
 
 ```
 src/
-├── components/
-│   └── ui/              # shadcn/ui components
-├── lib/
-│   └── utils.ts         # Utility functions
-├── App.tsx              # Main application component
-├── index.css            # Global styles with Tailwind
-└── main.tsx             # Application entry point
+├── components/       # UI, layout and shop components
+├── constants/        # Editorial copy and asset references
+├── context/          # Auth and cart providers
+├── data.ts           # Local showcase data used as an offline fallback
+├── lib/              # Supabase client and data helpers
+├── pages/            # Storefront and dashboard routes
+└── types.ts          # Shared domain types
+public/               # Locally hosted logo and illustration assets
+supabase/functions/   # Edge functions (checkout)
 ```
-
-## 🎨 Customization
-
-### Adding New shadcn/ui Components
-
-This template is pre-configured with shadcn/ui. You can add more components by creating them in the `src/components/ui/` directory.
-
-### Tailwind Configuration
-
-The Tailwind configuration is set up with shadcn/ui color variables. You can customize colors and other design tokens in:
-
-- `tailwind.config.js` - Tailwind configuration
-- `src/index.css` - CSS custom properties for themes
-
-### TypeScript Configuration
-
-Path mapping is configured for clean imports:
-
-```typescript
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-```
-
-## 🌗 Dark Mode
-
-The template includes dark mode support through Tailwind's `dark:` classes and CSS custom properties.
-
-## 📚 Learn More
-
-- [Vite Documentation](https://vitejs.dev/)
-- [React Documentation](https://react.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Radix UI](https://www.radix-ui.com/)
-
-## 🤝 Contributing
-
-Feel free to submit issues and enhancement requests!
-
-**⚡ Powered by [Dala](https://dala.gebeya.com)** - The AI-powered web development platform that helps you build full-stack applications faster.
-
----
-
-## 🤖 What is Dala?
-
-**[Gebeya Dala](https://dala.gebeya.com)** is an intelligent web development platform that accelerates your React development workflow. Build, preview, and deploy web applications, and instant development environments.
-
-🔗 **Try Dala:** [dala.gebeya.com](https://dala.gebeya.com)
-
-### Why Use Dala?
-
-- **AI-Powered Development** - Get intelligent code suggestions and automated component generation
-- **Instant Preview** - See your changes live in real-time sandbox environments
-- **Zero Setup** - No local environment configuration needed
-- **Collaborative** - Build and share projects with your team
-- **Deployment Ready** - One-click deployment to production
-
----
-
-Built with ❤️ by the Dala team to help developers build faster and smarter.
