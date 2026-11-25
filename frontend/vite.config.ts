@@ -19,7 +19,8 @@ export default defineConfig({
     }),
   ],
   server: {
-    port: 5180,
+    port: 5000,
+    strictPort: true,
     host: true,
     allowedHosts: true,
     proxy: {
@@ -38,7 +39,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   preview: {
-    port: 5180,
+    port: 5000,
+    strictPort: true,
     host: true,
     allowedHosts: true,
   },
