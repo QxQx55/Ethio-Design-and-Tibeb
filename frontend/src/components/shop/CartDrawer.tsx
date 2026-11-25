@@ -107,9 +107,9 @@ export function CartDrawer({ children }: { children: React.ReactNode }) {
               <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4">
                 <PackageOpen className="w-10 h-10 text-muted-foreground/50" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Your cart is empty</h3>
+              <h3 className="text-xl font-bold mb-2">Your bag is empty</h3>
               <p className="text-muted-foreground max-w-[250px] font-medium text-sm">
-                Looks like you haven't added any gifts yet.
+                Explore The Tibeb Collection to add handwoven pieces to your bag.
               </p>
               <Button 
                 variant="outline" 
@@ -223,7 +223,7 @@ export function CartDrawer({ children }: { children: React.ReactNode }) {
               </Button>
               
               <p className="text-center text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em] opacity-60">
-                Secured by ወንዳየሁ Gift Systems
+                Secured by Tebeb Design Atelier
               </p>
             </div>
           </SheetFooter>
