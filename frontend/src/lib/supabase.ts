@@ -1,7 +1,7 @@
 import { Profile, UserRole, Product, Category, Review } from '../types';
 import { localClient, isLocalBackend, LocalChannelType, toErrorShape } from './localClient';
 
-// The storefront talks to the bundled Node/SQLite backend (see server/index.js),
+// The storefront talks to the bundled Node/SQLite backend (see backend/index.js),
 // which exposes the same data shape the Supabase helpers used to return.
 export const isSupabaseConfigured = isLocalBackend;
 
