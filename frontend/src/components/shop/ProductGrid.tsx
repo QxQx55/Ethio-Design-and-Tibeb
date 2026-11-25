@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ProductCard } from "./ProductCard";
 import { Product, Category } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -12,26 +13,33 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 const EVENT_TYPES = [
   "All",
-  "Birthday",
-  "Anniversary",
-  "Wedding",
-  "Corporate",
-  "Graduation",
-  "Valentine's Day",
-  "Mother's Day",
-  "Father's Day"
+  "Look 01",
+  "Look 02",
+  "Look 03",
+  "Look 04",
+  "Look 05",
+  "Look 06",
+  "Look 07",
+  "Look 08",
 ];
 
 type SortOption = "newest" | "price-low" | "price-high" | "name";
 
 export function ProductGrid() {
+  const [searchParams] = useSearchParams();
+  const initialCategory = searchParams.get("category") || "All";
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
   
   // Filter States
-  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
+
+  useEffect(() => {
+    const paramCat = searchParams.get("category");
+    setActiveCategory(paramCat || "All");
+  }, [searchParams]);
   const [activeEvent, setActiveEvent] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState([0, 5000]);
@@ -144,13 +152,13 @@ export function ProductGrid() {
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} className="flex items-center gap-2 mb-6">
               <div className="h-[1px] w-12 bg-primary/40" />
-              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">Exquisite Selection</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">The Tibeb Collection</span>
             </motion.div>
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-5xl md:text-8xl font-black mb-8 tracking-tighter uppercase italic leading-[0.85] text-zinc-900">
-              The <span className="text-primary">Artisan</span> <br/> Collection
+              Handwoven <span className="text-primary">Atelier</span> <br/> Pieces
             </motion.h2>
             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl md:text-2xl text-muted-foreground font-medium">
-              Meticulously curated gifts designed to celebrate life's most precious moments with grace and elegance.
+              Ethiopian heritage garments and artisan accessories, hand-loomed in Addis Ababa for the modern wardrobe.
             </motion.p>
           </div>
           
@@ -304,8 +312,8 @@ export function ProductGrid() {
           <div className="w-32 h-32 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-10">
             <Search className="w-12 h-12 text-zinc-300" />
           </div>
-          <h3 className="text-3xl font-black uppercase italic mb-4">No matching treasures</h3>
-          <p className="text-xl text-zinc-400 max-w-md mx-auto">Adjust filters to discover more exquisite items.</p>
+          <h3 className="text-3xl font-black uppercase italic mb-4">No matching pieces</h3>
+          <p className="text-xl text-zinc-400 max-w-md mx-auto">Adjust filters to discover more handwoven garments and accessories.</p>
           <Button 
             variant="link" 
             onClick={resetFilters} 
