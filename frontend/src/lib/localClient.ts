@@ -2,7 +2,7 @@
  * Local API client.
  *
  * Mirrors the small slice of the Supabase JS client that the storefront uses,
- * but talks to the bundled Node/SQLite backend in `server/index.js`. This keeps
+ * but talks to the bundled Node/SQLite backend in `backend/index.js`. This keeps
  * every existing page and component untouched while giving the app a real,
  * persistent backend (accounts, catalog, orders, inventory, uploads).
  */
