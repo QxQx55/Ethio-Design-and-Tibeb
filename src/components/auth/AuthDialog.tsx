@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { UserRole } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { supabase, friendlyErrorMessage } from "@/lib/supabase";
 
 export function AuthDialog({ children, defaultTab = 'login' }: { children?: React.ReactNode, defaultTab?: 'login' | 'register' }) {
   const { signIn, signUp } = useAuth();
@@ -43,8 +43,8 @@ export function AuthDialog({ children, defaultTab = 'login' }: { children?: Reac
       toast.success("Verification email resent!", {
         description: "Please check your inbox (and spam folder).",
       });
-    } catch (error: any) {
-      toast.error(error.message || "Failed to resend verification email.");
+    } catch (error) {
+      toast.error(friendlyErrorMessage(error));
     } finally {
       setResendingEmail(false);
     }
@@ -81,10 +81,10 @@ export function AuthDialog({ children, defaultTab = 'login' }: { children?: Reac
         });
         setIsOpen(false);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Auth error:', error);
       
-      const errorMessage = error.message || "Authentication failed. Please try again.";
+      const errorMessage = friendlyErrorMessage(error);
       
       if (errorMessage.toLowerCase().includes('rate limit')) {
         toast.error("Security Alert: Rate limit exceeded", {
@@ -121,7 +121,7 @@ export function AuthDialog({ children, defaultTab = 'login' }: { children?: Reac
           <div className="relative z-10 flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center backdrop-blur-md shadow-lg overflow-hidden">
               <img 
-                src="https://storage.googleapis.com/dala-prod-public-storage/generated-images/95256d07-9087-4d6c-85b4-80bb5970fa97/shop-logo-69b80c26-1776578862439.webp" 
+                src="/logo.svg" 
                 alt="Logo" 
                 className="w-full h-full object-cover"
               />
