@@ -4,7 +4,7 @@ import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { Toaster } from "./components/ui/sonner";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { CartPage } from "./pages/CartPage";
 import { UserDashboard } from "./pages/UserDashboard";
@@ -80,14 +80,11 @@ function AuthRedirect() {
 
 function AppContent() {
   const { scrollYProgress } = useScroll();
-  const location = useLocation();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
-
-  const isHomePage = location.pathname === '/' || location.pathname === '/shop';
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500">
@@ -98,7 +95,7 @@ function AppContent() {
 
       <Navbar />
       
-      <main className={isHomePage ? "" : "pt-24"}>
+      <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<HomePage />} />
