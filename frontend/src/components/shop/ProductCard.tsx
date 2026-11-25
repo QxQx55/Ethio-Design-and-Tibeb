@@ -10,7 +10,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop";
+const FALLBACK_IMAGE = "/runway-models/ethiopian-look-01.png";
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
@@ -116,7 +116,7 @@ export function ProductCard({ product }: ProductCardProps) {
             ${Number(product.price).toFixed(2)}
           </p>
           <span className="text-[10px] font-bold text-zinc-400 uppercase">
-            {product.event || "Gifting"}
+            {product.event || "Atelier"}
           </span>
         </div>
       </div>
