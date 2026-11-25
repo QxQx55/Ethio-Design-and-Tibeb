@@ -1,13 +1,15 @@
 # Ethio Design and Tibeb
 
-An Ethiopian couture storefront built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui and Supabase.
+An Ethiopian couture storefront built with React, TypeScript, Vite, Tailwind CSS and shadcn/ui, backed by a bundled Node.js + SQLite API.
 
 ## Features
 
 - Curated product catalog with search, category/event filters, price range and sorting
 - Shopping cart and quick product views
-- Customer, staff and admin dashboards with Supabase auth and realtime updates
-- Offline showcase: if the catalog cannot be reached, the shop displays a local sample collection with a retry option instead of an error screen
+- Customer accounts, order history and checkout
+- Staff and admin dashboards for orders, inventory, categories and image uploads
+- Persistent data: accounts, sessions, products, orders and stock live in `server/data/store.db`
+- Offline showcase: if the API cannot be reached, the shop displays a local sample collection with a retry option instead of an error screen
 
 ## Getting started
 
@@ -16,40 +18,69 @@ npm install
 npm run dev
 ```
 
-The dev server runs on port 3000.
+`npm run dev` starts both processes:
 
-## Configuration
+- Storefront: http://localhost:5180
+- API: http://localhost:3101 (proxied through `/api` and `/uploads`)
 
-Copy `.env.example` to `.env.local` and point it at your own Supabase project:
+If port 5180 is taken, Vite moves to the next free port; use the URL printed in the terminal.
+
+## Demo accounts
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@ethiodesign.test` | `Admin123!` |
+| Staff | `staff@ethiodesign.test` | `Staff123!` |
+| Customer | `customer@ethiodesign.test` | `Customer123!` |
+
+New accounts can also be created from the sign-in dialog. Passwords are salted and hashed with scrypt.
+
+## Production
 
 ```bash
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+npm run build
+npm start
 ```
 
-The anon key is safe to expose in the browser; row-level security in Supabase controls what it can access. Without configuration, the app falls back to built-in demo credentials and, if those are unreachable, to the offline showcase data in `src/data.ts`.
+`npm start` serves the built storefront and the API together on http://localhost:5180.
+
+## Data and configuration
+
+- SQLite database: `server/data/store.db` (created and seeded on first run)
+- Uploaded product images: `server/uploads/`
+- Optional environment overrides:
+  - `API_PORT` — API port when running `node server/index.js` directly (default `3101`)
+  - `VITE_API_URL` — absolute API origin for a split frontend/API deployment (default: same origin)
+
+Both `server/data` and `server/uploads` are git-ignored, so each checkout starts with a clean seeded catalog.
 
 ## Scripts
 
 | Command | Description |
 | --- | --- |
-| `npm run dev` | Start the development server |
+| `npm run dev` | Start the storefront and the API together |
+| `npm run dev:web` | Start only the Vite storefront |
+| `npm run dev:api` | Start only the Node/SQLite API |
 | `npm run build` | Type-check and build for production |
-| `npm run preview` | Preview the production build |
+| `npm start` | Serve the production build and API together |
+| `npm run preview` | Preview the production build with Vite |
 | `npm run typecheck` | Run TypeScript checks |
 | `npm run lint` | Run ESLint |
 
 ## Project structure
 
 ```
+server/
+├── index.js          # HTTP API, auth, SQLite schema, seeding and static serving
 src/
 ├── components/       # UI, layout and shop components
 ├── constants/        # Editorial copy and asset references
 ├── context/          # Auth and cart providers
 ├── data.ts           # Local showcase data used as an offline fallback
-├── lib/              # Supabase client and data helpers
+├── lib/              # Local API client and data helpers
 ├── pages/            # Storefront and dashboard routes
 └── types.ts          # Shared domain types
 public/               # Locally hosted logo and illustration assets
-supabase/functions/   # Edge functions (checkout)
+design-preview.html   # Static visual reference kept for design review
+supabase/functions/   # Legacy Stripe checkout edge function (not used by the local backend)
 ```
