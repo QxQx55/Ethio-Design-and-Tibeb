@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Wondayheu Gift Shop">
+  <rect width="64" height="64" rx="16" fill="#141414"/>
+  <path d="M10 26h44v26a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V26Z" fill="#C9A227"/>
+  <path d="M8 19h48v10H8z" fill="#E8CE83"/>
+  <path d="M32 19v37" stroke="#141414" stroke-width="5"/>
+  <path d="M32 19C22 19 15 16 15 11c0-4 4-7 8-7 5 0 9 7 9 15Zm0 0c10 0 17-3 17-8 0-4-4-7-8-7-5 0-9 7-9 15Z" fill="none" stroke="#E8CE83" stroke-width="4" stroke-linejoin="round"/>
+</svg>
