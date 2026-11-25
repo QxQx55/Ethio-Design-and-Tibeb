@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3ece1"/><stop offset="1" stop-color="#dfd2bb"/></linearGradient></defs>
+  <rect width="600" height="750" fill="url(#bg)"/>
+  <ellipse cx="300" cy="650" rx="160" ry="26" fill="#000" opacity=".08"/>
+  <g stroke="#3f6b3a" stroke-width="12" fill="none">
+    <path d="M300 600V330M300 430l-90-80M300 430l90-80M300 520l-75-60M300 520l75-60"/>
+  </g>
+  <g fill="#b4232b"><circle cx="300" cy="310" r="52"/><circle cx="198" cy="338" r="46"/><circle cx="402" cy="338" r="46"/><circle cx="218" cy="455" r="42"/><circle cx="382" cy="455" r="42"/></g>
+  <g fill="#d9b45c"><circle cx="300" cy="310" r="18"/><circle cx="198" cy="338" r="16"/><circle cx="402" cy="338" r="16"/><circle cx="218" cy="455" r="15"/><circle cx="382" cy="455" r="15"/></g>
+  <path d="M220 560h160l-20 90H240Z" fill="#e8ce83" stroke="#a97b25" stroke-width="8"/>
+</svg>
