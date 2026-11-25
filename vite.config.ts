@@ -18,12 +18,22 @@ export default defineConfig({
     }),
   ],
   server: {
-    port: 3000,
+    port: 5180,
     host: true,
     allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3101',
+        changeOrigin: true,
+      },
+      '/uploads': {
+        target: 'http://localhost:3101',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
-    port: 3000,
+    port: 5180,
     host: true,
     allowedHosts: true,
   },
