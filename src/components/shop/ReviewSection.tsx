@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getReviews, subscribeToProducts, supabase } from "@/lib/supabase";
-import { FALLBACK_REVIEWS } from "@/constants/content";
+import { FALLBACK_REVIEWS } from "@/data";
 import { Review } from "@/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, ChevronLeft, ChevronRight, Sparkles, Loader2 } from "lucide-react";
@@ -27,7 +27,7 @@ export function ReviewSection() {
     fetchReviewsData();
     const sub = subscribeToProducts(() => fetchReviewsData());
     return () => {
-      supabase.removeChannel(sub);
+      if (sub) supabase.removeChannel(sub);
     };
   }, []);
 
