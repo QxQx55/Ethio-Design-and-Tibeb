@@ -1,6 +1,19 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Product, CartItem } from "../types";
 import { toast } from "sonner";
+
+const CART_STORAGE_KEY = 'ethio-design-and-tibeb.cart.v1';
+
+const readStoredCart = (): CartItem[] => {
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 
 interface CartContextType {
   cart: CartItem[];
@@ -15,7 +28,15 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(readStoredCart);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch {
+      /* storage can be blocked in private mode */
+    }
+  }, [cart]);
 
   const addToCart = (product: Product) => {
     setCart((prev) => {
