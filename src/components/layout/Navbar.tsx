@@ -39,8 +39,8 @@ export function Navbar() {
     <nav className={`sticky top-0 z-50 border-b border-[#e6e1d8] bg-[#f7f5f0]/95 backdrop-blur-md transition-shadow ${
       isScrolled ? "shadow-[0_8px_24px_rgba(54,45,33,0.06)]" : ""
     }`}>
-      <div className="mx-auto flex h-[72px] max-w-[1580px] items-center justify-between gap-5 px-5 sm:px-8 lg:px-12">
-        <Link to="/" className="group flex min-w-[180px] flex-col leading-none">
+      <div className="mx-auto grid h-[58px] max-w-[1580px] grid-cols-[1fr_auto_1fr] items-center gap-5 px-5 sm:px-8 lg:px-12">
+        <Link to="/" className="group flex w-fit flex-col leading-none">
           <span className="font-serif text-[19px] tracking-[0.17em] text-[#29251f] transition-colors group-hover:text-[#8d4a39]">
             TEBEB DESIGN
           </span>
@@ -49,19 +49,11 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className="text-[9px] uppercase tracking-[0.2em] text-[#5b554c] transition-colors hover:text-[#8d4a39]"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="text-[9px] uppercase tracking-[0.3em] text-[#6e665b]">
+          Runway
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center justify-end gap-1 sm:gap-2">
           <Button asChild variant="ghost" size="icon" aria-label="Browse collection" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
             <Link to="/#collection"><Search className="h-[17px] w-[17px]" /></Link>
           </Button>
@@ -130,6 +122,17 @@ export function Navbar() {
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
+      </div>
+      <div className="hidden h-[34px] items-center justify-center gap-8 border-t border-[#e6e1d8]/70 md:flex">
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            to={link.href}
+            className="text-[8px] uppercase tracking-[0.2em] text-[#716a60] transition-colors hover:text-[#8d4a39]"
+          >
+            {link.label}
+          </Link>
+        ))}
       </div>
       {isMobileMenuOpen && (
         <div className="border-t border-[#e6e1d8] bg-[#f7f5f0] px-5 py-4 md:hidden">
