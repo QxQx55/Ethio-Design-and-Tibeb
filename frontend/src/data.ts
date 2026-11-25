@@ -111,7 +111,7 @@ const FALLBACK_PIECE_DEFINITIONS: Record<
   "Look 03": [
     ["Tibeb Collar Tunic Jacket", 195, "Outerwear", "/pieces/piece-jacket-ivory.png"],
     ["Wide-Leg Cotton Trousers", 155, "Trousers", "/pieces/piece-trousers-ivory.png"],
-    ["Woven Trim Clutch", 115, "Accessories", "/pieces/piece-bag-ivory.png"],
+    ["Woven Trim Clutch", 115, "Accessories", "/pieces/piece-bag-ivory.svg"],
   ],
   "Look 04": [
     ["Navy Trim Cropped Top", 125, "Tops", "/pieces/piece-top-navy-trim.png"],
@@ -121,12 +121,12 @@ const FALLBACK_PIECE_DEFINITIONS: Record<
   "Look 05": [
     ["One-Shoulder Shemma Dress", 260, "Dresses", "/pieces/piece-dress-oneshoulder.png"],
     ["Mesob Crimson Basket Tote", 180, "Accessories", "/pieces/piece-bag-red.png"],
-    ["Hand-Strung Beaded Necklace", 85, "Jewelry", "/pieces/piece-necklace-beaded.png"],
+    ["Hand-Strung Beaded Necklace", 85, "Jewelry", "/pieces/piece-necklace-beaded.svg"],
   ],
   "Look 06": [
     ["Indigo Diamond Weave Shawl", 135, "Shawls", "/pieces/piece-shawl-indigo.png"],
     ["Navy & Gold Pleated Skirt", 195, "Skirts", "/pieces/piece-skirt-indigo.png"],
-    ["Artisan Silver Pendant", 90, "Jewelry", "/pieces/piece-necklace-silver.png"],
+    ["Artisan Silver Pendant", 90, "Jewelry", "/pieces/piece-necklace-silver.svg"],
   ],
   "Look 07": [
     ["Charcoal Pleated Evening Gown", 310, "Dresses", "/pieces/piece-dress-black.png"],
@@ -135,8 +135,8 @@ const FALLBACK_PIECE_DEFINITIONS: Record<
   ],
   "Look 08": [
     ["Crimson Heritage Kemis Gown", 290, "Dresses", "/pieces/piece-dress-crimson.png"],
-    ["Woven Crimson Crossbody Bag", 145, "Accessories", "/pieces/piece-bag-crimson.png"],
-    ["Gold Filigree Drop Earrings", 80, "Jewelry", "/pieces/piece-earrings-gold.png"],
+    ["Woven Crimson Crossbody Bag", 145, "Accessories", "/pieces/piece-bag-crimson.svg"],
+    ["Gold Filigree Drop Earrings", 80, "Jewelry", "/pieces/piece-earrings-gold.svg"],
   ],
 };
 
