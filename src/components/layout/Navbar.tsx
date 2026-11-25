@@ -1,8 +1,7 @@
-import { ShoppingBag, Search, Menu, User, Heart, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, User, LogOut, LayoutDashboard, Settings } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { CartDrawer } from "../shop/CartDrawer";
 import { AuthDialog } from "../auth/AuthDialog";
@@ -15,15 +14,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export function Navbar() {
   const { cartCount } = useCart();
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
-
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -32,149 +29,124 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isDarkNav = isScrolled || location.pathname !== '/';
+  const links = [
+    { label: "Runway", href: "/#runway" },
+    { label: "The collection", href: "/#collection" },
+    { label: "Our story", href: "/#story" },
+  ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-[0.22, 1, 0.36, 1] ${
-      isScrolled 
-        ? "bg-white/60 backdrop-blur-2xl border-b border-zinc-200/50 shadow-sm py-2" 
-        : "bg-transparent py-6"
+    <nav className={`sticky top-0 z-50 border-b border-[#e6e1d8] bg-[#f7f5f0]/95 backdrop-blur-md transition-shadow ${
+      isScrolled ? "shadow-[0_8px_24px_rgba(54,45,33,0.06)]" : ""
     }`}>
-      <div className="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between gap-8">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-4 group cursor-pointer">
-          <motion.div 
-            whileHover={{ rotate: 5, scale: 1.05 }}
-            className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20 overflow-hidden"
-          >
-            <img 
-              src="https://storage.googleapis.com/dala-prod-public-storage/generated-images/95256d07-9087-4d6c-85b4-80bb5970fa97/shop-logo-69b80c26-1776578862439.webp" 
-              alt="Logo" 
-              className="w-full h-full object-cover"
-            />
-          </motion.div>
-          <div className="flex flex-col">
-            <span className={`text-2xl font-black tracking-tighter leading-none uppercase italic transition-colors duration-500 ${
-              !isScrolled && location.pathname === '/' ? "text-white" : "text-zinc-900"
-            }`}>
-              ወንዳየሁ
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
-              gift shop
-            </span>
-          </div>
+      <div className="mx-auto flex h-[72px] max-w-[1580px] items-center justify-between gap-5 px-5 sm:px-8 lg:px-12">
+        <Link to="/" className="group flex min-w-[180px] flex-col leading-none">
+          <span className="font-serif text-[19px] tracking-[0.17em] text-[#29251f] transition-colors group-hover:text-[#8d4a39]">
+            TEBEB DESIGN
+          </span>
+          <span className="mt-1.5 text-[8px] uppercase tracking-[0.26em] text-[#8a8378]">
+            Ethiopian couture
+          </span>
         </Link>
 
-        {/* Search - Desktop */}
-        <div className="hidden lg:flex flex-1 max-w-xl relative group">
-          <Input 
-            placeholder="Search luxury items..." 
-            className={`pl-12 h-12 border-none transition-all duration-500 rounded-full focus-visible:ring-2 focus-visible:ring-primary/40 ${
-              !isScrolled && location.pathname === '/' 
-                ? "bg-transparent backdrop-blur-md text-white placeholder:text-white/50 border border-white/20" 
-                : "bg-zinc-100 text-zinc-900"
-            }`}
-          />
-          <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-500 ${
-            !isScrolled && location.pathname === '/' ? "text-white/50" : "text-zinc-400"
-          }`} />
+        <div className="hidden items-center gap-8 md:flex">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="text-[9px] uppercase tracking-[0.2em] text-[#5b554c] transition-colors hover:text-[#8d4a39]"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2 md:gap-6">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={`hidden sm:flex rounded-full transition-colors duration-500 ${
-              !isScrolled && location.pathname === '/' ? "text-white hover:bg-white/10" : "text-zinc-600 hover:bg-zinc-100"
-            }`}
-          >
-            <Heart className="w-5 h-5" />
+        <div className="flex items-center gap-1 sm:gap-2">
+          <Button asChild variant="ghost" size="icon" aria-label="Browse collection" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
+            <Link to="/#collection"><Search className="h-[17px] w-[17px]" /></Link>
           </Button>
-          
+
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className={`rounded-full transition-colors duration-500 ${
-                    !isScrolled && location.pathname === '/' ? "text-white hover:bg-white/10" : "text-zinc-600 hover:bg-zinc-100"
-                  }`}
-                >
-                  <User className="w-5 h-5" />
+                <Button variant="ghost" size="icon" aria-label="Account menu" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
+                  <User className="h-[17px] w-[17px]" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64 rounded-2xl p-3 border-none shadow-2xl backdrop-blur-xl bg-white/95">
+              <DropdownMenuContent align="end" className="w-64 rounded-2xl border border-[#e6e1d8] bg-[#fbfaf7] p-3 shadow-xl">
                 <DropdownMenuLabel className="font-normal pb-3">
                   <div className="flex flex-col space-y-2">
-                    <p className="text-sm font-black uppercase tracking-tight">{user?.name}</p>
-                    <p className="text-xs font-medium text-muted-foreground bg-zinc-100 px-2 py-1 rounded-md inline-block w-fit">{user?.role}</p>
-                    <p className="text-[10px] text-muted-foreground">{user?.email}</p>
+                    <p className="text-sm font-semibold tracking-tight">{user?.name}</p>
+                    <p className="inline-block w-fit rounded-md bg-[#eee9e0] px-2 py-1 text-xs font-medium text-[#716a60]">{user?.role}</p>
+                    <p className="text-[10px] text-[#716a60]">{user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-zinc-100" />
-                <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/5 py-3">
-                  <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex items-center w-full font-bold uppercase text-[11px] tracking-wider">
-                    <LayoutDashboard className="mr-3 h-4 w-4 text-primary" />
+                <DropdownMenuSeparator className="bg-[#e6e1d8]" />
+                <DropdownMenuItem asChild className="rounded-xl py-3 focus:bg-[#eee9e0]">
+                  <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex w-full items-center text-[11px] font-semibold uppercase tracking-wider">
+                    <LayoutDashboard className="mr-3 h-4 w-4 text-[#8d4a39]" />
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="rounded-xl focus:bg-primary/5 py-3">
-                  <Settings className="mr-3 h-4 w-4 text-primary" />
-                  <span className="font-bold uppercase text-[11px] tracking-wider">Settings</span>
+                <DropdownMenuItem className="rounded-xl py-3 focus:bg-[#eee9e0]">
+                  <Settings className="mr-3 h-4 w-4 text-[#8d4a39]" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider">Settings</span>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-zinc-100" />
-                <DropdownMenuItem className="rounded-xl text-destructive focus:bg-destructive/5 focus:text-destructive py-3 cursor-pointer" onClick={logout}>
+                <DropdownMenuSeparator className="bg-[#e6e1d8]" />
+                <DropdownMenuItem className="cursor-pointer rounded-xl py-3 text-destructive focus:bg-destructive/5 focus:text-destructive" onClick={logout}>
                   <LogOut className="mr-3 h-4 w-4" />
-                  <span className="font-bold uppercase text-[11px] tracking-wider">Logout</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-wider">Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <AuthDialog>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className={`rounded-full transition-colors duration-500 ${
-                  !isScrolled && location.pathname === '/' ? "text-white hover:bg-white/10" : "text-zinc-600 hover:bg-zinc-100"
-                }`}
-              >
-                <User className="w-5 h-5" />
+              <Button variant="ghost" size="icon" aria-label="Sign in" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
+                <User className="h-[17px] w-[17px]" />
               </Button>
             </AuthDialog>
           )}
           
           <CartDrawer>
-            <Button 
-              variant="outline" 
-              className={`relative h-12 px-8 gap-3 rounded-full shadow-lg transition-all duration-500 group border-none ${
-                !isScrolled && location.pathname === '/' 
-                  ? "bg-white text-black hover:bg-zinc-100" 
-                  : "bg-zinc-900 text-white hover:bg-zinc-800"
-              }`}
-            >
-              <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span className="hidden sm:block font-black uppercase tracking-widest text-[10px]">Cart</span>
+            <Button variant="ghost" aria-label={`Open shopping bag${cartCount ? `, ${cartCount} items` : ""}`} className="group relative h-10 gap-2 rounded-full px-3 text-[#433e36] hover:bg-[#ece7de]">
+              <ShoppingBag className="h-[17px] w-[17px] transition-transform group-hover:scale-105" />
+              <span className="hidden text-[9px] uppercase tracking-[0.16em] sm:block">Bag</span>
               {cartCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 px-2 py-0.5 min-w-[24px] h-6 flex items-center justify-center bg-primary text-primary-foreground border-2 border-background font-black text-[10px] shadow-xl animate-in zoom-in">
+                <Badge className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center border-2 border-[#f7f5f0] bg-[#8d4a39] px-1 text-[9px] font-semibold text-white">
                   {cartCount}
                 </Badge>
               )}
             </Button>
           </CartDrawer>
 
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={`lg:hidden rounded-full transition-colors duration-500 ${
-              !isScrolled && location.pathname === '/' ? "text-white hover:bg-white/10" : "text-zinc-600 hover:bg-zinc-100"
-            }`}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de] md:hidden"
           >
-            <Menu className="w-6 h-6" />
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
+      {isMobileMenuOpen && (
+        <div className="border-t border-[#e6e1d8] bg-[#f7f5f0] px-5 py-4 md:hidden">
+          <div className="mx-auto flex max-w-[1580px] flex-col gap-1 sm:px-3">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-3 text-[10px] uppercase tracking-[0.2em] text-[#5b554c]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
