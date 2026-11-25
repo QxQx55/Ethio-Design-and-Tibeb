@@ -10,6 +10,7 @@ dns.setDefaultResultOrder("verbatim");
 
 // https://vite.dev/config/
 export default defineConfig({
+  root: path.resolve(__dirname),
   plugins: [
     react(),
     tailwindcss(),
@@ -31,6 +32,10 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  build: {
+    outDir: path.resolve(__dirname, "../dist"),
+    emptyOutDir: true,
   },
   preview: {
     port: 5180,
