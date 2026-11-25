@@ -172,7 +172,7 @@ const RUNWAY_LOOKS = [
     pieces: [
       ['Tibeb Collar Tunic Jacket', 195, 'Outerwear', '/pieces/piece-jacket-ivory.png'],
       ['Wide-Leg Cotton Trousers', 155, 'Trousers', '/pieces/piece-trousers-ivory.png'],
-      ['Woven Trim Clutch', 115, 'Accessories', '/pieces/piece-bag-ivory.png'],
+      ['Woven Trim Clutch', 115, 'Accessories', '/pieces/piece-bag-ivory.svg'],
     ],
   },
   {
@@ -190,7 +190,7 @@ const RUNWAY_LOOKS = [
     pieces: [
       ['One-Shoulder Shemma Dress', 260, 'Dresses', '/pieces/piece-dress-oneshoulder.png'],
       ['Mesob Crimson Basket Tote', 180, 'Accessories', '/pieces/piece-bag-red.png'],
-      ['Hand-Strung Beaded Necklace', 85, 'Jewelry', '/pieces/piece-necklace-beaded.png'],
+      ['Hand-Strung Beaded Necklace', 85, 'Jewelry', '/pieces/piece-necklace-beaded.svg'],
     ],
   },
   {
@@ -199,7 +199,7 @@ const RUNWAY_LOOKS = [
     pieces: [
       ['Indigo Diamond Weave Shawl', 135, 'Shawls', '/pieces/piece-shawl-indigo.png'],
       ['Navy & Gold Pleated Skirt', 195, 'Skirts', '/pieces/piece-skirt-indigo.png'],
-      ['Artisan Silver Pendant', 90, 'Jewelry', '/pieces/piece-necklace-silver.png'],
+      ['Artisan Silver Pendant', 90, 'Jewelry', '/pieces/piece-necklace-silver.svg'],
     ],
   },
   {
@@ -216,8 +216,8 @@ const RUNWAY_LOOKS = [
     description: 'Regal crimson, emerald and gold heritage Habesha Kemis.',
     pieces: [
       ['Crimson Heritage Kemis Gown', 290, 'Dresses', '/pieces/piece-dress-crimson.png'],
-      ['Woven Crimson Crossbody Bag', 145, 'Accessories', '/pieces/piece-bag-crimson.png'],
-      ['Gold Filigree Drop Earrings', 80, 'Jewelry', '/pieces/piece-earrings-gold.png'],
+      ['Woven Crimson Crossbody Bag', 145, 'Accessories', '/pieces/piece-bag-crimson.svg'],
+      ['Gold Filigree Drop Earrings', 80, 'Jewelry', '/pieces/piece-earrings-gold.svg'],
     ],
   },
 ];
@@ -238,11 +238,11 @@ function get(sql, ...params) {
 
 function seedDatabase() {
   const seeded = get("SELECT value FROM meta WHERE key = 'seed_version'");
-  if (seeded?.value === '2') return;
+  if (seeded?.value === '3') return;
 
   const base = Date.now();
 
-  if (seeded?.value === '1') {
+  if (seeded?.value === '1' || seeded?.value === '2') {
     // Upgrade legacy gift-shop seed to the pure Tebeb Design collection
     run("DELETE FROM products WHERE id LIKE 'sample-%' AND id NOT IN (SELECT product_id FROM order_items)");
     run("DELETE FROM categories WHERE name IN ('Gift Boxes', 'Personalized', 'Flowers', 'Corporate', 'Tibeb Collection')");
@@ -291,7 +291,7 @@ function seedDatabase() {
       'Ordered the Tailored Tibeb Blazer for a family celebration—impeccable cotton weight and tailoring.',
       'Tailored Tibeb Blazer',
     );
-    run("INSERT OR REPLACE INTO meta (key, value) VALUES ('seed_version', '2')");
+    run("INSERT OR REPLACE INTO meta (key, value) VALUES ('seed_version', '3')");
     return;
   }
 
@@ -387,7 +387,7 @@ function seedDatabase() {
     run('UPDATE products SET stock = MAX(stock - 1, 0) WHERE id IN (?, ?)', 'runway-1-1', 'runway-2-2');
   }
 
-  run("INSERT OR REPLACE INTO meta (key, value) VALUES ('seed_version', '2')");
+  run("INSERT OR REPLACE INTO meta (key, value) VALUES ('seed_version', '3')");
 }
 
 createSchema();
