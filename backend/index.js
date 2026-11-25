@@ -148,24 +148,81 @@ const TABLES = {
 };
 
 const RUNWAY_LOOKS = [
-  ['Look 01', 'A modern heirloom in ivory and woven gold.'],
-  ['Look 02', 'Soft cotton and intricate hand-finished Tibeb.'],
-  ['Look 03', 'A fluid silhouette with a deep indigo border.'],
-  ['Look 04', 'A statement of red, white and woven pattern.'],
-  ['Look 05', 'A contemporary take on the traditional shemma.'],
-  ['Look 06', 'Warm earth tones, finished by hand in Addis.'],
-  ['Look 07', 'Lightweight layers with a signature woven edge.'],
-  ['Look 08', 'A sculptural occasion look made for the runway.'],
+  {
+    title: 'Look 01',
+    description: 'A modern heirloom in ivory and terracotta-gold Tibeb.',
+    pieces: [
+      ['Kemis Embroidered Jacket', 165, 'Outerwear', '/pieces/piece-jacket-brown.png'],
+      ['Netela Woven Shawl', 95, 'Shawls', '/pieces/piece-shawl-ivory.png'],
+      ['Terracotta Border Skirt', 185, 'Skirts', '/pieces/piece-skirt-brown.png'],
+    ],
+  },
+  {
+    title: 'Look 02',
+    description: 'Handwoven ivory cotton with olive-gold Tibeb cuffs.',
+    pieces: [
+      ['Olive Cuff Cotton Blouse', 145, 'Tops', '/pieces/piece-blouse-olive.png'],
+      ['Olive Hem Midi Skirt', 175, 'Skirts', '/pieces/piece-skirt-olive.png'],
+      ['Tilet Border Gown', 240, 'Dresses', '/pieces/piece-dress-olive.png'],
+    ],
+  },
+  {
+    title: 'Look 03',
+    description: 'Tailored two-piece ivory suit with woven olive collar.',
+    pieces: [
+      ['Tibeb Collar Tunic Jacket', 195, 'Outerwear', '/pieces/piece-jacket-ivory.png'],
+      ['Wide-Leg Cotton Trousers', 155, 'Trousers', '/pieces/piece-trousers-ivory.png'],
+      ['Woven Trim Clutch', 115, 'Accessories', '/pieces/piece-bag-ivory.png'],
+    ],
+  },
+  {
+    title: 'Look 04',
+    description: 'Structured ivory blazer over navy and gold Tibeb.',
+    pieces: [
+      ['Navy Trim Cropped Top', 125, 'Tops', '/pieces/piece-top-navy-trim.png'],
+      ['Tailored Tibeb Blazer', 220, 'Outerwear', '/pieces/piece-blazer-ivory.png'],
+      ['Indigo Border Mini Skirt', 160, 'Skirts', '/pieces/piece-skirt-navy-trim.png'],
+    ],
+  },
+  {
+    title: 'Look 05',
+    description: 'Asymmetric shemma silhouette paired with woven Mesob tote.',
+    pieces: [
+      ['One-Shoulder Shemma Dress', 260, 'Dresses', '/pieces/piece-dress-oneshoulder.png'],
+      ['Mesob Crimson Basket Tote', 180, 'Accessories', '/pieces/piece-bag-red.png'],
+      ['Hand-Strung Beaded Necklace', 85, 'Jewelry', '/pieces/piece-necklace-beaded.png'],
+    ],
+  },
+  {
+    title: 'Look 06',
+    description: 'Deep indigo pleated couture with diamond Tibeb weave.',
+    pieces: [
+      ['Indigo Diamond Weave Shawl', 135, 'Shawls', '/pieces/piece-shawl-indigo.png'],
+      ['Navy & Gold Pleated Skirt', 195, 'Skirts', '/pieces/piece-skirt-indigo.png'],
+      ['Artisan Silver Pendant', 90, 'Jewelry', '/pieces/piece-necklace-silver.png'],
+    ],
+  },
+  {
+    title: 'Look 07',
+    description: 'Sculptural charcoal evening gown with metallic woven belt.',
+    pieces: [
+      ['Charcoal Pleated Evening Gown', 310, 'Dresses', '/pieces/piece-dress-black.png'],
+      ['Braided Gold & Leather Belt', 95, 'Accessories', '/pieces/piece-belt-gold.png'],
+      ['Sheer Silk Evening Netela', 110, 'Shawls', '/pieces/piece-shawl-black.png'],
+    ],
+  },
+  {
+    title: 'Look 08',
+    description: 'Regal crimson, emerald and gold heritage Habesha Kemis.',
+    pieces: [
+      ['Crimson Heritage Kemis Gown', 290, 'Dresses', '/pieces/piece-dress-crimson.png'],
+      ['Woven Crimson Crossbody Bag', 145, 'Accessories', '/pieces/piece-bag-crimson.png'],
+      ['Gold Filigree Drop Earrings', 80, 'Jewelry', '/pieces/piece-earrings-gold.png'],
+    ],
+  },
 ];
 
-const SAMPLE_PRODUCTS = [
-  ['sample-1', 'Signature Silk Gift Box', 189, 'A hand-finished keepsake box lined with silk, perfect for birthdays and anniversaries.', 'Gift Boxes', '/product-1.svg', 5, 42, 24, 'Birthday'],
-  ['sample-2', 'Midnight Rose Perfume', 245, 'An elegant floral fragrance presented in a faceted glass flacon.', 'Personalized', '/product-2.svg', 4.8, 31, 12, 'Anniversary'],
-  ['sample-3', 'Blossom Bouquet', 96, 'A curated arrangement of seasonal blooms wrapped in artisan paper.', 'Flowers', '/product-3.svg', 4.9, 58, 30, 'Wedding'],
-  ['sample-4', 'Heritage Gold Watch', 420, 'A timeless timepiece with a brushed gold case and Italian leather strap.', 'Jewelry', '/product-4.svg', 4.7, 19, 6, 'Corporate'],
-  ['sample-5', 'Artisan Chocolate Collection', 78, 'Twenty-four handcrafted pralines in a foil-stamped gift portfolio.', 'Gift Boxes', '/product-5.svg', 4.9, 87, 45, "Valentine's Day"],
-  ['sample-6', 'Executive Leather Satchel', 310, 'Full-grain leather with brass detailing, made to be carried for years.', 'Corporate', '/product-6.svg', 4.6, 14, 9, 'Graduation'],
-];
+const FASHION_CATEGORIES = ['Dresses', 'Outerwear', 'Tops', 'Skirts', 'Trousers', 'Shawls', 'Accessories', 'Jewelry'];
 
 function run(sql, ...params) {
   return db.prepare(sql).run(...params);
@@ -181,7 +238,62 @@ function get(sql, ...params) {
 
 function seedDatabase() {
   const seeded = get("SELECT value FROM meta WHERE key = 'seed_version'");
-  if (seeded) return;
+  if (seeded?.value === '2') return;
+
+  const base = Date.now();
+
+  if (seeded?.value === '1') {
+    // Upgrade legacy gift-shop seed to the pure Tebeb Design collection
+    run("DELETE FROM products WHERE id LIKE 'sample-%' AND id NOT IN (SELECT product_id FROM order_items)");
+    run("DELETE FROM categories WHERE name IN ('Gift Boxes', 'Personalized', 'Flowers', 'Corporate', 'Tibeb Collection')");
+    const upsertProduct = db.prepare(`
+      INSERT INTO products (id, name, price, description, category, image, rating, reviews, stock, event, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        name = excluded.name,
+        price = excluded.price,
+        description = excluded.description,
+        category = excluded.category,
+        image = excluded.image,
+        event = excluded.event,
+        updated_at = excluded.updated_at
+    `);
+    const insertCategoryIgnore = db.prepare('INSERT OR IGNORE INTO categories (id, name, created_at) VALUES (?, ?, ?)');
+    RUNWAY_LOOKS.forEach((look, lookIndex) => {
+      look.pieces.forEach(([name, price, category, image], pieceIndex) => {
+        const created = new Date(base - (lookIndex * 3 + pieceIndex) * 86400000).toISOString();
+        upsertProduct.run(
+          `runway-${lookIndex + 1}-${pieceIndex + 1}`,
+          name,
+          price,
+          `${look.description} Handwoven in Addis Ababa.`,
+          category,
+          image,
+          5,
+          8 + lookIndex,
+          6,
+          look.title,
+          created,
+          created,
+        );
+      });
+    });
+    FASHION_CATEGORIES.forEach((name, index) => {
+      insertCategoryIgnore.run(uuid(), name, new Date(base - index * 86400000).toISOString());
+    });
+    run(
+      "UPDATE reviews SET comment = ?, \"productName\" = ? WHERE id = 'sample-r1'",
+      'The Kemis Embroidered Jacket and Netela Shawl arrived beautifully packed. The handwoven Tibeb border is extraordinary.',
+      'Kemis Embroidered Jacket',
+    );
+    run(
+      "UPDATE reviews SET comment = ?, \"productName\" = ? WHERE id = 'sample-r2'",
+      'Ordered the Tailored Tibeb Blazer for a family celebration—impeccable cotton weight and tailoring.',
+      'Tailored Tibeb Blazer',
+    );
+    run("INSERT OR REPLACE INTO meta (key, value) VALUES ('seed_version', '2')");
+    return;
+  }
 
   const insertProduct = db.prepare(`
     INSERT INTO products (id, name, price, description, category, image, rating, reviews, stock, event, created_at, updated_at)
@@ -198,36 +310,27 @@ function seedDatabase() {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  const base = Date.now();
-
-  RUNWAY_LOOKS.forEach(([title, description], lookIndex) => {
-    const names = [`${title} Tibeb blouse`, `${title} Handwoven skirt`, `${title} Cotton shawl`];
-    const prices = [145 + lookIndex * 7, 185 + lookIndex * 9, 95 + lookIndex * 5];
-    names.forEach((name, pieceIndex) => {
+  RUNWAY_LOOKS.forEach((look, lookIndex) => {
+    look.pieces.forEach(([name, price, category, image], pieceIndex) => {
       const created = new Date(base - (lookIndex * 3 + pieceIndex) * 86400000).toISOString();
       insertProduct.run(
         `runway-${lookIndex + 1}-${pieceIndex + 1}`,
         name,
-        prices[pieceIndex],
-        `${description} Made in Ethiopia.`,
-        'Tibeb Collection',
-        `/runway-models/ethiopian-look-${String(lookIndex + 1).padStart(2, '0')}.jpg`,
+        price,
+        `${look.description} Handwoven in Addis Ababa.`,
+        category,
+        image,
         5,
         8 + lookIndex,
         6,
-        title,
+        look.title,
         created,
         created,
       );
     });
   });
 
-  SAMPLE_PRODUCTS.forEach(([id, name, price, description, category, image, rating, reviewCount, stock, event], index) => {
-    const created = new Date(base - (index + 30) * 86400000).toISOString();
-    insertProduct.run(id, name, price, description, category, image, rating, reviewCount, stock, event, created, created);
-  });
-
-  ['Tibeb Collection', 'Gift Boxes', 'Personalized', 'Flowers', 'Jewelry', 'Corporate'].forEach((name, index) => {
+  FASHION_CATEGORIES.forEach((name, index) => {
     insertCategory.run(uuid(), name, new Date(base - index * 86400000).toISOString());
   });
 
@@ -236,9 +339,9 @@ function seedDatabase() {
     'Selamawit Tadesse',
     '/avatar-1.svg',
     5,
-    'The Signature Silk Gift Box surpassed all my expectations. The presentation was flawless!',
+    'The Kemis Embroidered Jacket and Netela Shawl arrived beautifully packed. The handwoven Tibeb border is extraordinary.',
     '2 days ago',
-    'Signature Silk Gift Box',
+    'Kemis Embroidered Jacket',
     new Date(base - 2 * 86400000).toISOString(),
   );
   insertReview.run(
@@ -246,9 +349,9 @@ function seedDatabase() {
     'Dawit Girma',
     '/avatar-2.svg',
     5,
-    'I ordered the Executive Leather Satchel for my father\'s birthday. The quality is exceptional.',
+    'Ordered the Tailored Tibeb Blazer for a family celebration—impeccable cotton weight and tailoring.',
     '1 week ago',
-    'Executive Leather Satchel',
+    'Tailored Tibeb Blazer',
     new Date(base - 7 * 86400000).toISOString(),
   );
 
@@ -275,16 +378,16 @@ function seedDatabase() {
       customerId,
       'pending',
       'unpaid',
-      339,
+      340,
       createdAt,
       createdAt,
     );
-    run('INSERT INTO order_items (id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)', uuid(), orderId, 'runway-1-1', 1, 145);
-    run('INSERT INTO order_items (id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)', uuid(), orderId, 'runway-2-2', 1, 194);
+    run('INSERT INTO order_items (id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)', uuid(), orderId, 'runway-1-1', 1, 165);
+    run('INSERT INTO order_items (id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)', uuid(), orderId, 'runway-2-2', 1, 175);
     run('UPDATE products SET stock = MAX(stock - 1, 0) WHERE id IN (?, ?)', 'runway-1-1', 'runway-2-2');
   }
 
-  run("INSERT INTO meta (key, value) VALUES ('seed_version', '1')");
+  run("INSERT OR REPLACE INTO meta (key, value) VALUES ('seed_version', '2')");
 }
 
 createSchema();
