@@ -1,11 +1,15 @@
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { WishlistProvider } from "./context/WishlistContext";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { Toaster } from "./components/ui/sonner";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
+import { ShopPage } from "./pages/ShopPage";
+import { LookbookPage } from "./pages/LookbookPage";
+import { MakersPage } from "./pages/MakersPage";
 import { CartPage } from "./pages/CartPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import { AdminDashboard } from "./pages/AdminDashboard";
@@ -15,23 +19,28 @@ import { Mail } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { UserRole } from "./types";
 
-function ProtectedRoute({ children, roles }: { children: React.ReactNode, roles?: UserRole[] }) {
+function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?: UserRole[] }) {
   const { isAuthenticated, user, loading, isEmailVerified, logout } = useAuth();
 
-  if (loading) return <div className="h-screen w-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>;
-  
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-[#f7f5f0]">
+        <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-[#2b2a26]" />
+      </div>
+    );
+  }
+
   if (!isAuthenticated) return <Navigate to="/" replace />;
-  
+
   if (!isEmailVerified) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-4 text-center space-y-4">
-        <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2">
-          <Mail className="w-8 h-8" />
+      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-4 p-4 text-center">
+        <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+          <Mail className="h-8 w-8" />
         </div>
         <h2 className="text-2xl font-bold">Verify your email</h2>
-        <p className="text-muted-foreground max-w-md">
-          You need to verify your email address to access this page. 
-          Please check your inbox for the verification link.
+        <p className="max-w-md text-muted-foreground">
+          You need to verify your email address to access this page. Please check your inbox for the verification link.
         </p>
         <div className="flex gap-4">
           <Button variant="outline" onClick={() => window.location.reload()}>
@@ -46,13 +55,12 @@ function ProtectedRoute({ children, roles }: { children: React.ReactNode, roles?
   }
 
   const userRole = user?.role;
-  
-  if (roles && userRole) {
-    if (!roles.includes(userRole)) {
-       if (userRole === 'admin') return <Navigate to="/admin-dashboard" replace />;
-       if (userRole === 'staff') return <Navigate to="/admin-dashboard" replace />;
-       return <Navigate to="/shop" replace />;
+
+  if (roles && userRole && !roles.includes(userRole)) {
+    if (userRole === "admin" || userRole === "staff") {
+      return <Navigate to="/admin-dashboard" replace />;
     }
+    return <Navigate to="/shop" replace />;
   }
 
   return <>{children}</>;
@@ -65,12 +73,8 @@ function AuthRedirect() {
   useEffect(() => {
     if (!loading && isAuthenticated && user && isEmailVerified) {
       const currentPath = window.location.pathname;
-      if (currentPath === '/shop') {
-        if (user.role === 'admin' || user.role === 'staff') {
-           navigate('/admin-dashboard', { replace: true });
-        } else {
-           navigate('/shop', { replace: true });
-        }
+      if (currentPath === "/shop" && (user.role === "admin" || user.role === "staff")) {
+        navigate("/admin-dashboard", { replace: true });
       }
     }
   }, [isAuthenticated, user, loading, navigate, isEmailVerified]);
@@ -85,57 +89,50 @@ function AppContent() {
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500">
+    <div className="min-h-screen bg-[#f7f5f0] text-[#2b2a26] selection:bg-[#8d4a39]/15 transition-colors duration-500">
       {!isRunwayLanding && (
         <motion.div
-          className="fixed top-0 left-0 right-0 h-1 bg-primary z-[60] origin-left"
+          className="fixed left-0 right-0 top-0 z-[60] h-0.5 origin-left bg-[#8d4a39]"
           style={{ scaleX }}
         />
       )}
 
-      {!isRunwayLanding && <Navbar />}
-      
+      <Navbar />
+
       <main>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <iframe
-                src="/design-preview.html"
-                title="Tebeb Design runway collection"
-                className="fixed inset-0 h-[100dvh] w-full border-0"
-              />
-            }
-          />
-          <Route path="/shop" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/lookbook" element={<LookbookPage />} />
+          <Route path="/makers" element={<MakersPage />} />
           <Route path="/cart" element={<CartPage />} />
-          <Route 
-            path="/dashboard" 
+          <Route
+            path="/dashboard"
             element={
-              <ProtectedRoute roles={['user']}>
+              <ProtectedRoute roles={["user"]}>
                 <UserDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/admin-dashboard" 
+          <Route
+            path="/admin-dashboard"
             element={
-              <ProtectedRoute roles={['admin', 'staff']}>
+              <ProtectedRoute roles={["admin", "staff"]}>
                 <AdminDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/staff-dashboard" 
+          <Route
+            path="/staff-dashboard"
             element={
-              <ProtectedRoute roles={['staff']}>
+              <ProtectedRoute roles={["staff"]}>
                 <StaffDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
           <Route path="/admin" element={<Navigate to="/admin-dashboard" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -153,9 +150,11 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <CartProvider>
-          <AppContent />
-        </CartProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <AppContent />
+          </CartProvider>
+        </WishlistProvider>
       </AuthProvider>
     </Router>
   );
