@@ -1,2 +1,115 @@
-// Static data removed. Using Supabase dynamic fetching.
-export {};
+import { Category, Product, Review } from "@/types";
+
+/**
+ * Local showcase data. Used only when the live Supabase catalog cannot be
+ * reached, so the storefront still works instead of showing a blocking error.
+ */
+export const FALLBACK_PRODUCTS: Product[] = [
+  {
+    id: "sample-1",
+    name: "Signature Silk Gift Box",
+    description: "A hand-finished keepsake box lined with silk, perfect for birthdays and anniversaries.",
+    price: 189,
+    category: "Gift Boxes",
+    image: "/product-1.svg",
+    rating: 5,
+    reviews: 42,
+    stock: 24,
+    event: "Birthday",
+    created_at: "2026-04-18T10:00:00.000Z",
+  },
+  {
+    id: "sample-2",
+    name: "Midnight Rose Perfume",
+    description: "An elegant floral fragrance presented in a faceted glass flacon.",
+    price: 245,
+    category: "Personalized",
+    image: "/product-2.svg",
+    rating: 4.8,
+    reviews: 31,
+    stock: 12,
+    event: "Anniversary",
+    created_at: "2026-04-14T10:00:00.000Z",
+  },
+  {
+    id: "sample-3",
+    name: "Blossom Bouquet",
+    description: "A curated arrangement of seasonal blooms wrapped in artisan paper.",
+    price: 96,
+    category: "Flowers",
+    image: "/product-3.svg",
+    rating: 4.9,
+    reviews: 58,
+    stock: 30,
+    event: "Wedding",
+    created_at: "2026-04-10T10:00:00.000Z",
+  },
+  {
+    id: "sample-4",
+    name: "Heritage Gold Watch",
+    description: "A timeless timepiece with a brushed gold case and Italian leather strap.",
+    price: 420,
+    category: "Jewelry",
+    image: "/product-4.svg",
+    rating: 4.7,
+    reviews: 19,
+    stock: 6,
+    event: "Corporate",
+    created_at: "2026-04-05T10:00:00.000Z",
+  },
+  {
+    id: "sample-5",
+    name: "Artisan Chocolate Collection",
+    description: "Twenty-four handcrafted pralines in a foil-stamped gift portfolio.",
+    price: 78,
+    category: "Gift Boxes",
+    image: "/product-5.svg",
+    rating: 4.9,
+    reviews: 87,
+    stock: 45,
+    event: "Valentine's Day",
+    created_at: "2026-03-29T10:00:00.000Z",
+  },
+  {
+    id: "sample-6",
+    name: "Executive Leather Satchel",
+    description: "Full-grain leather with brass detailing, made to be carried for years.",
+    price: 310,
+    category: "Corporate",
+    image: "/product-6.svg",
+    rating: 4.6,
+    reviews: 14,
+    stock: 9,
+    event: "Graduation",
+    created_at: "2026-03-22T10:00:00.000Z",
+  },
+];
+
+export const FALLBACK_CATEGORIES: Category[] = [
+  { id: "sample-cat-1", name: "Gift Boxes", created_at: "2026-01-01T00:00:00.000Z" },
+  { id: "sample-cat-2", name: "Personalized", created_at: "2026-01-01T00:00:00.000Z" },
+  { id: "sample-cat-3", name: "Flowers", created_at: "2026-01-01T00:00:00.000Z" },
+  { id: "sample-cat-4", name: "Jewelry", created_at: "2026-01-01T00:00:00.000Z" },
+  { id: "sample-cat-5", name: "Corporate", created_at: "2026-01-01T00:00:00.000Z" },
+];
+
+export const FALLBACK_REVIEWS: Review[] = [
+  {
+    id: "sample-r1",
+    userName: "Selamawit Tadesse",
+    userImage: "/avatar-1.svg",
+    rating: 5,
+    comment: "The Signature Silk Gift Box surpassed all my expectations. The presentation was flawless!",
+    date: "2 days ago",
+    productName: "Signature Silk Gift Box",
+  },
+  {
+    id: "sample-r2",
+    userName: "Dawit Girma",
+    userImage: "/avatar-2.svg",
+    rating: 5,
+    comment: "I ordered the Executive Leather Satchel for my father's birthday. The quality is exceptional.",
+    date: "1 week ago",
+    productName: "Executive Leather Satchel",
+  },
+];
