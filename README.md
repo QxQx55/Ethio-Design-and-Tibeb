@@ -20,10 +20,10 @@ npm run dev
 
 `npm run dev` starts both processes:
 
-- Storefront: http://localhost:5180
+- Storefront: http://localhost:5000
 - API: http://localhost:3101 (proxied through `/api` and `/uploads`)
 
-If port 5180 is taken, Vite moves to the next free port; use the URL printed in the terminal.
+Port 5000 must be available before starting the storefront.
 
 ## Demo accounts
 
@@ -42,7 +42,7 @@ npm run build
 npm start
 ```
 
-`npm start` serves the built storefront and the API together on http://localhost:5180.
+`npm start` serves the built storefront and the API together on http://localhost:5000.
 
 ## Data and configuration
 
