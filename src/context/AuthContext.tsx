@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Profile, UserRole } from '../types';
-import { supabase, getUserProfile, signUpUser, signInUser } from '../lib/supabase';
+import { supabase, getUserProfile, signUpUser, signInUser, friendlyErrorMessage } from '../lib/supabase';
 import { toast } from 'sonner';
 
 interface AuthContextType {
@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.warn('Error fetching profile:', friendlyErrorMessage(error));
       setUser(null);
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setLoading(false);
         }
       } catch (error) {
-        console.error('Error initializing session:', error);
+        console.warn('Error initializing session:', friendlyErrorMessage(error));
         if (mounted) setLoading(false);
       }
     };
@@ -106,9 +106,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.session?.user) {
         await fetchProfile(data.session.user.id);
       }
-    } catch (error: any) {
-      console.error('Sign in error:', error.message);
-      throw error;
+    } catch (error) {
+      const message = friendlyErrorMessage(error);
+      console.error('Sign in error:', message);
+      throw new Error(message);
     }
   };
 
@@ -131,9 +132,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.session?.user) {
         await fetchProfile(data.session.user.id);
       }
-    } catch (error: any) {
-      console.error('Sign up error:', error.message);
-      throw error;
+    } catch (error) {
+      const message = friendlyErrorMessage(error);
+      console.error('Sign up error:', message);
+      throw new Error(message);
     }
   };
 
@@ -145,8 +147,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(null);
       setIsEmailVerified(false);
       toast.info("Logged out successfully");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to log out");
+    } catch (error) {
+      toast.error(friendlyErrorMessage(error));
     }
   };
 
