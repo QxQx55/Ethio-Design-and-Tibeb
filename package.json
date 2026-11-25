@@ -4,8 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "PORT=3000 vite --host 0.0.0.0",
+    "dev": "concurrently -k -n web,api -c cyan,magenta \"vite --host 0.0.0.0 --port 5180\" \"node server/index.js --port 3101\"",
+    "dev:web": "vite --host 0.0.0.0 --port 5180",
+    "dev:api": "node server/index.js --port 3101",
     "build": "tsc -b && vite build",
+    "start": "node server/index.js --static --port 5180",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "preview": "vite preview --host 0.0.0.0"
