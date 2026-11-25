@@ -18,18 +18,18 @@ import { supabase, subscribeToProducts, subscribeToCategories, getAllProducts, g
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const EVENT_TYPES = [
-  "Birthday",
-  "Anniversary",
-  "Wedding",
-  "Corporate",
-  "Graduation",
-  "Valentine's Day",
-  "Mother's Day",
-  "Father's Day",
-  "Other"
+  "Look 01",
+  "Look 02",
+  "Look 03",
+  "Look 04",
+  "Look 05",
+  "Look 06",
+  "Look 07",
+  "Look 08",
+  "Atelier"
 ];
 
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop";
+const FALLBACK_IMAGE = "/runway-models/ethiopian-look-01.png";
 
 export function AdminDashboard() {
   const { user, isAdmin } = useAuth();
