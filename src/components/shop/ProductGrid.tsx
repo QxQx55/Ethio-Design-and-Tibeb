@@ -6,7 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SlidersHorizontal, Search, X, Loader2, AlertCircle, ChevronDown, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { getAllProducts, getCategories, subscribeToProducts, subscribeToCategories, supabase } from "@/lib/supabase";
+import { getAllProducts, getCategories, subscribeToProducts, subscribeToCategories, supabase, friendlyErrorMessage } from "@/lib/supabase";
+import { FALLBACK_CATEGORIES, FALLBACK_PRODUCTS } from "@/data";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const EVENT_TYPES = [
@@ -27,7 +28,7 @@ export function ProductGrid() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
   
   // Filter States
   const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -43,12 +44,14 @@ export function ProductGrid() {
         getAllProducts(),
         getCategories()
       ]);
-      setProducts(productsData);
-      setCategories(categoriesData);
-      setError(null);
-    } catch (err: any) {
-      console.error('Error fetching grid data:', err);
-      setError(err.message || "Failed to load products.");
+      setProducts(productsData.length > 0 ? productsData : FALLBACK_PRODUCTS);
+      setCategories(categoriesData.length > 0 ? categoriesData : FALLBACK_CATEGORIES);
+      setIsOffline(false);
+    } catch (err) {
+      console.warn('Live catalog unavailable, showing local showcase:', friendlyErrorMessage(err));
+      setProducts(FALLBACK_PRODUCTS);
+      setCategories(FALLBACK_CATEGORIES);
+      setIsOffline(true);
     } finally {
       setLoading(false);
     }
@@ -59,13 +62,13 @@ export function ProductGrid() {
     const prodSub = subscribeToProducts(() => fetchData());
     const catSub = subscribeToCategories(() => fetchData());
     return () => {
-      supabase.removeChannel(prodSub);
-      supabase.removeChannel(catSub);
+      if (prodSub) supabase.removeChannel(prodSub);
+      if (catSub) supabase.removeChannel(catSub);
     };
   }, []);
 
   const filteredAndSortedProducts = useMemo(() => {
-    let result = products.filter(p => {
+    const result = products.filter(p => {
       const matchesCategory = activeCategory === "All" || p.category === activeCategory;
       const matchesEvent = activeEvent === "All" || p.event === activeEvent;
       const matchesSearch = 
@@ -112,21 +115,30 @@ export function ProductGrid() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="py-60 text-center">
-        <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8">
-          <AlertCircle className="w-10 h-10 text-red-500" />
-        </div>
-        <h3 className="text-3xl font-black uppercase italic mb-4">Connection Lost</h3>
-        <p className="text-xl text-zinc-400 max-w-md mx-auto mb-10">{error}</p>
-        <Button onClick={() => { setLoading(true); fetchData(); }} className="rounded-full h-14 font-black px-10">Retry</Button>
-      </div>
-    );
-  }
-
   return (
     <section className="max-w-[1600px] mx-auto px-6 py-32" id="shop">
+      {isOffline && (
+        <div className="mb-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 rounded-[1.5rem] border border-amber-200 bg-amber-50 px-6 py-5 text-amber-950">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-amber-600" />
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.2em]">Offline showcase</p>
+              <p className="text-sm font-medium text-amber-800 mt-1">
+                We couldn't reach the live catalog, so you're viewing our curated sample collection.
+              </p>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0 rounded-full border-amber-300 font-black uppercase tracking-widest text-[10px]"
+            onClick={() => { setLoading(true); fetchData(); }}
+          >
+            Retry connection
+          </Button>
+        </div>
+      )}
+
       <div className="flex flex-col space-y-12 mb-20">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
           <div className="max-w-3xl">
