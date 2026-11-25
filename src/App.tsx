@@ -4,7 +4,7 @@ import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { Toaster } from "./components/ui/sonner";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { CartPage } from "./pages/CartPage";
 import { UserDashboard } from "./pages/UserDashboard";
@@ -65,7 +65,7 @@ function AuthRedirect() {
   useEffect(() => {
     if (!loading && isAuthenticated && user && isEmailVerified) {
       const currentPath = window.location.pathname;
-      if (currentPath === '/' || currentPath === '/shop') {
+      if (currentPath === '/shop') {
         if (user.role === 'admin' || user.role === 'staff') {
            navigate('/admin-dashboard', { replace: true });
         } else {
@@ -79,6 +79,8 @@ function AuthRedirect() {
 }
 
 function AppContent() {
+  const { pathname } = useLocation();
+  const isRunwayLanding = pathname === "/";
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -88,16 +90,27 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500">
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-primary z-[60] origin-left"
-        style={{ scaleX }}
-      />
+      {!isRunwayLanding && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-1 bg-primary z-[60] origin-left"
+          style={{ scaleX }}
+        />
+      )}
 
-      <Navbar />
+      {!isRunwayLanding && <Navbar />}
       
       <main>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/"
+            element={
+              <iframe
+                src="/design-preview.html"
+                title="Tebeb Design runway collection"
+                className="fixed inset-0 h-[100dvh] w-full border-0"
+              />
+            }
+          />
           <Route path="/shop" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route 
@@ -129,7 +142,7 @@ function AppContent() {
         </Routes>
       </main>
 
-      <Footer />
+      {!isRunwayLanding && <Footer />}
       <Toaster position="top-center" expand={true} richColors />
       <AuthRedirect />
     </div>
