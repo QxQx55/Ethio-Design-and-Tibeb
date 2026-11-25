@@ -1,9 +1,10 @@
-import { ShoppingBag, Search, Menu, X, User, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, User, LogOut, LayoutDashboard, Heart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { CartDrawer } from "../shop/CartDrawer";
+import { WishlistDrawer } from "../shop/WishlistDrawer";
 import { AuthDialog } from "../auth/AuthDialog";
 import { useState, useEffect } from "react";
 import {
@@ -14,99 +15,165 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+const MAIN_LINKS = [
+  { label: "Runway", to: "/" },
+  { label: "The Makers", to: "/makers" },
+  { label: "Look Book", to: "/lookbook" },
+  { label: "Shop", to: "/shop" },
+];
+
+const SUB_LINKS = [
+  { label: "Collections", to: "/shop" },
+  { label: "Dresses", to: "/shop?category=Dresses" },
+  { label: "Outerwear", to: "/shop?category=Outerwear" },
+  { label: "Shawls", to: "/shop?category=Shawls" },
+  { label: "Accessories", to: "/shop?category=Accessories" },
+  { label: "Jewelry", to: "/shop?category=Jewelry" },
+];
 
 export function Navbar() {
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const { pathname } = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const links = [
-    { label: "Runway", href: "/#runway" },
-    { label: "The collection", href: "/#collection" },
-    { label: "Our story", href: "/#story" },
-  ];
-
   return (
-    <nav className={`sticky top-0 z-50 border-b border-[#e6e1d8] bg-[#f7f5f0]/95 backdrop-blur-md transition-shadow ${
-      isScrolled ? "shadow-[0_8px_24px_rgba(54,45,33,0.06)]" : ""
-    }`}>
-      <div className="mx-auto grid h-[58px] max-w-[1580px] grid-cols-[1fr_auto_1fr] items-center gap-5 px-5 sm:px-8 lg:px-12">
-        <Link to="/" className="group flex w-fit flex-col leading-none">
-          <span className="font-serif text-[19px] tracking-[0.17em] text-[#29251f] transition-colors group-hover:text-[#8d4a39]">
+    <header
+      className={`sticky top-0 z-50 border-b border-[#e6e1d8]/80 bg-[#f7f5f0]/95 backdrop-blur-md transition-shadow ${
+        isScrolled ? "shadow-[0_8px_24px_rgba(54,45,33,0.06)]" : ""
+      }`}
+    >
+      <div className="mx-auto grid h-[54px] max-w-[1720px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 sm:px-8 lg:px-10">
+        <Link to="/" className="group flex w-fit items-center gap-2.5 leading-none">
+          <span className="font-display text-[10px] uppercase tracking-[0.24em] text-[#2b2a26] transition-colors group-hover:text-[#8d4a39] sm:text-[11px]">
             TEBEB DESIGN
-          </span>
-          <span className="mt-1.5 text-[8px] uppercase tracking-[0.26em] text-[#8a8378]">
-            Ethiopian couture
           </span>
         </Link>
 
-        <div className="text-[9px] uppercase tracking-[0.3em] text-[#6e665b]">
-          Runway
-        </div>
+        <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex lg:gap-8">
+          {MAIN_LINKS.map((link) => {
+            const isActive = pathname === link.to;
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`font-display text-[9px] uppercase tracking-[0.22em] transition-colors ${
+                  isActive
+                    ? "text-[#2b2a26]"
+                    : "text-[#b6b0a3] hover:text-[#2b2a26]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
 
         <div className="flex items-center justify-end gap-1 sm:gap-2">
-          <Button asChild variant="ghost" size="icon" aria-label="Browse collection" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
-            <Link to="/#collection"><Search className="h-[17px] w-[17px]" /></Link>
-          </Button>
-
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Account menu" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
-                  <User className="h-[17px] w-[17px]" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Account menu"
+                  className="h-9 gap-1.5 rounded-full px-2.5 font-display text-[8px] uppercase tracking-[0.18em] text-[#433e36] hover:bg-[#ece7de]"
+                >
+                  <User className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{user?.name?.split(" ")[0] || "Account"}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64 rounded-2xl border border-[#e6e1d8] bg-[#fbfaf7] p-3 shadow-xl">
-                <DropdownMenuLabel className="font-normal pb-3">
-                  <div className="flex flex-col space-y-2">
-                    <p className="text-sm font-semibold tracking-tight">{user?.name}</p>
-                    <p className="inline-block w-fit rounded-md bg-[#eee9e0] px-2 py-1 text-xs font-medium text-[#716a60]">{user?.role}</p>
+              <DropdownMenuContent align="end" className="w-60 rounded-none border border-[#e2dbd0] bg-[#fbfaf7] p-2.5 shadow-xl">
+                <DropdownMenuLabel className="pb-2.5 font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-xs font-medium tracking-tight text-[#2b2a26]">{user?.name}</p>
                     <p className="text-[10px] text-[#716a60]">{user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-[#e6e1d8]" />
-                <DropdownMenuItem asChild className="rounded-xl py-3 focus:bg-[#eee9e0]">
-                  <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex w-full items-center text-[11px] font-semibold uppercase tracking-wider">
-                    <LayoutDashboard className="mr-3 h-4 w-4 text-[#8d4a39]" />
+                <DropdownMenuItem asChild className="rounded-none py-2.5 focus:bg-[#eee9e0]">
+                  <Link
+                    to={isAdmin ? "/admin" : "/dashboard"}
+                    className="flex w-full items-center text-[10px] uppercase tracking-[0.18em]"
+                  >
+                    <LayoutDashboard className="mr-2.5 h-3.5 w-3.5 text-[#8d4a39]" />
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="rounded-xl py-3 focus:bg-[#eee9e0]">
-                  <Settings className="mr-3 h-4 w-4 text-[#8d4a39]" />
-                  <span className="text-[11px] font-semibold uppercase tracking-wider">Settings</span>
-                </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-[#e6e1d8]" />
-                <DropdownMenuItem className="cursor-pointer rounded-xl py-3 text-destructive focus:bg-destructive/5 focus:text-destructive" onClick={logout}>
-                  <LogOut className="mr-3 h-4 w-4" />
-                  <span className="text-[11px] font-semibold uppercase tracking-wider">Logout</span>
+                <DropdownMenuItem
+                  className="cursor-pointer rounded-none py-2.5 text-destructive focus:bg-destructive/5 focus:text-destructive"
+                  onClick={logout}
+                >
+                  <LogOut className="mr-2.5 h-3.5 w-3.5" />
+                  <span className="text-[10px] uppercase tracking-[0.18em]">Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <AuthDialog>
-              <Button variant="ghost" size="icon" aria-label="Sign in" className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de]">
-                <User className="h-[17px] w-[17px]" />
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label="Login"
+                className="h-9 rounded-full px-2.5 font-display text-[8px] uppercase tracking-[0.18em] text-[#433e36] hover:bg-[#ece7de]"
+              >
+                <span className="hidden sm:inline">Login</span>
+                <User className="h-4 w-4 sm:hidden" />
               </Button>
             </AuthDialog>
           )}
-          
+
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            aria-label="Search collection"
+            className="h-9 w-9 rounded-full text-[#433e36] hover:bg-[#ece7de]"
+          >
+            <Link to="/shop">
+              <Search className="h-[15px] w-[15px]" />
+            </Link>
+          </Button>
+
+          <WishlistDrawer>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={`Saved pieces${wishlistCount ? `, ${wishlistCount} saved` : ""}`}
+              className="relative h-9 w-9 rounded-full text-[#433e36] hover:bg-[#ece7de]"
+            >
+              <Heart className="h-[15px] w-[15px]" />
+              {wishlistCount > 0 && (
+                <span className="absolute right-1 top-1 flex h-3.5 min-w-[14px] items-center justify-center rounded-full bg-[#8d4a39] px-1 text-[8px] font-medium text-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </Button>
+          </WishlistDrawer>
+
           <CartDrawer>
-            <Button variant="ghost" aria-label={`Open shopping bag${cartCount ? `, ${cartCount} items` : ""}`} className="group relative h-10 gap-2 rounded-full px-3 text-[#433e36] hover:bg-[#ece7de]">
-              <ShoppingBag className="h-[17px] w-[17px] transition-transform group-hover:scale-105" />
-              <span className="hidden text-[9px] uppercase tracking-[0.16em] sm:block">Bag</span>
+            <Button
+              variant="ghost"
+              aria-label={`Open shopping bag${cartCount ? `, ${cartCount} items` : ""}`}
+              className="h-9 gap-1.5 rounded-full px-2.5 font-display text-[8px] uppercase tracking-[0.18em] text-[#433e36] hover:bg-[#ece7de]"
+            >
+              <ShoppingBag className="h-[15px] w-[15px]" />
+              <span className="hidden sm:inline">Cart ({cartCount})</span>
               {cartCount > 0 && (
-                <Badge className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center border-2 border-[#f7f5f0] bg-[#8d4a39] px-1 text-[9px] font-semibold text-white">
+                <span className="text-[9px] font-medium text-[#8d4a39] sm:hidden">
                   {cartCount}
-                </Badge>
+                </span>
               )}
             </Button>
           </CartDrawer>
@@ -117,32 +184,39 @@ export function Navbar() {
             aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMobileMenuOpen}
             onClick={() => setIsMobileMenuOpen((open) => !open)}
-            className="h-10 w-10 rounded-full text-[#433e36] hover:bg-[#ece7de] md:hidden"
+            className="h-9 w-9 rounded-full text-[#433e36] hover:bg-[#ece7de] md:hidden"
           >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
       </div>
-      <div className="hidden h-[34px] items-center justify-center gap-8 border-t border-[#e6e1d8]/70 md:flex">
-        {links.map((link) => (
+
+      <nav
+        aria-label="Collection categories"
+        className="hidden h-[30px] items-center justify-center gap-7 border-t border-[#e6e1d8]/60 md:flex"
+      >
+        {SUB_LINKS.map((link) => (
           <Link
-            key={link.href}
-            to={link.href}
-            className="text-[8px] uppercase tracking-[0.2em] text-[#716a60] transition-colors hover:text-[#8d4a39]"
+            key={link.label}
+            to={link.to}
+            className="text-[8px] uppercase tracking-[0.22em] text-[#8d887b] transition-colors hover:text-[#2b2a26]"
           >
             {link.label}
           </Link>
         ))}
-      </div>
+      </nav>
+
       {isMobileMenuOpen && (
         <div className="border-t border-[#e6e1d8] bg-[#f7f5f0] px-5 py-4 md:hidden">
-          <div className="mx-auto flex max-w-[1580px] flex-col gap-1 sm:px-3">
-            {links.map((link) => (
+          <div className="flex flex-col gap-1">
+            {MAIN_LINKS.map((link) => (
               <Link
-                key={link.href}
-                to={link.href}
+                key={link.to}
+                to={link.to}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="py-3 text-[10px] uppercase tracking-[0.2em] text-[#5b554c]"
+                className={`py-2.5 font-display text-[10px] uppercase tracking-[0.2em] ${
+                  pathname === link.to ? "text-[#2b2a26]" : "text-[#7c766b]"
+                }`}
               >
                 {link.label}
               </Link>
@@ -150,6 +224,6 @@ export function Navbar() {
           </div>
         </div>
       )}
-    </nav>
+    </header>
   );
 }
