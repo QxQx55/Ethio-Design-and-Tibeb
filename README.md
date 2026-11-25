@@ -1,6 +1,6 @@
-# Wondayheu Gift Shop
+# Ethio Design and Tibeb
 
-A luxury gift storefront built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui and Supabase.
+An Ethiopian couture storefront built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui and Supabase.
 
 ## Features
 
