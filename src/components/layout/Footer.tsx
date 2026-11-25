@@ -1,76 +1,65 @@
-import { Gift, Instagram, Twitter, Facebook, Mail } from "lucide-react";
+import { Instagram, Twitter, Facebook, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function Footer() {
   return (
-    <footer className="bg-muted/30 pt-20 pb-10 border-t">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground">
-                <Gift className="w-6 h-6" />
-              </div>
-              <span className="text-xl font-bold tracking-tight">
-                Wondayheu<span className="text-primary">.</span>
-              </span>
-            </div>
-            <p className="text-muted-foreground leading-relaxed">
-              Elevating the art of gifting. We curate premium products to help you celebrate life's most meaningful moments.
+    <footer id="story" className="border-t border-[#e1dbd1] bg-[#f7f5f0] py-14 text-[#29251f] sm:py-18">
+      <div className="mx-auto max-w-[1580px] px-5 sm:px-8 lg:px-12">
+        <div className="mb-14 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1.2fr] lg:gap-14">
+          <div className="space-y-5">
+            <div className="font-serif text-lg tracking-[0.17em]">TEBEB DESIGN</div>
+            <p className="max-w-xs text-sm leading-6 text-[#716a60]">
+              Ethiopian craftsmanship, reimagined for the modern wardrobe. Made with care in Addis Ababa.
             </p>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10 hover:text-primary">
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" aria-label="Instagram" className="rounded-full text-[#655e54] hover:bg-[#ece7de] hover:text-[#8d4a39]">
                 <Instagram className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10 hover:text-primary">
+              <Button variant="ghost" size="icon" aria-label="Twitter" className="rounded-full text-[#655e54] hover:bg-[#ece7de] hover:text-[#8d4a39]">
                 <Twitter className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10 hover:text-primary">
+              <Button variant="ghost" size="icon" aria-label="Facebook" className="rounded-full text-[#655e54] hover:bg-[#ece7de] hover:text-[#8d4a39]">
                 <Facebook className="w-5 h-5" />
               </Button>
             </div>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-lg">Shop</h4>
-            <ul className="space-y-4">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">New Arrivals</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Gift Boxes</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Best Sellers</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Flowers</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Personalized</a></li>
+            <h4 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.2em]">Explore</h4>
+            <ul className="space-y-3 text-sm text-[#716a60]">
+              <li><a href="/#runway" className="transition-colors hover:text-[#8d4a39]">Runway</a></li>
+              <li><a href="/#collection" className="transition-colors hover:text-[#8d4a39]">The collection</a></li>
+              <li><a href="/#story" className="transition-colors hover:text-[#8d4a39]">Our story</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-lg">Support</h4>
-            <ul className="space-y-4">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Shipping Policy</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Returns & Exchanges</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Track Order</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">FAQs</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</a></li>
+            <h4 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.2em]">Information</h4>
+            <ul className="space-y-3 text-sm text-[#716a60]">
+              <li><a href="#story" className="transition-colors hover:text-[#8d4a39]">Craft & care</a></li>
+              <li><a href="mailto:hello@tebebdesign.com" className="transition-colors hover:text-[#8d4a39]">Contact the atelier</a></li>
+              <li><a href="/cart" className="transition-colors hover:text-[#8d4a39]">Your bag</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-lg">Newsletter</h4>
-            <p className="text-muted-foreground mb-6">Subscribe to receive updates, access to exclusive deals, and more.</p>
+            <h4 className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em]">Letters from the atelier</h4>
+            <p className="mb-5 text-sm leading-6 text-[#716a60]">New collections, studio stories and notes on craft.</p>
             <div className="space-y-3">
-              <Input placeholder="Enter your email" className="bg-background" />
-              <Button className="w-full gap-2">
+              <Input placeholder="Your email address" className="h-11 rounded-none border-[#d9d2c7] bg-transparent text-sm focus-visible:ring-[#8d4a39]" />
+              <Button className="h-11 w-full gap-2 rounded-none bg-[#29251f] text-[9px] uppercase tracking-[0.18em] text-white hover:bg-[#8d4a39]">
                 <Mail className="w-4 h-4" /> Subscribe
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>&copy; 2024 Wondayheu. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-primary">Privacy Policy</a>
-            <a href="#" className="hover:text-primary">Terms of Service</a>
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-[#e1dbd1] pt-6 text-[10px] uppercase tracking-[0.14em] text-[#81796d] md:flex-row">
+          <p>&copy; 2025 TEBEB DESIGN. Made in Ethiopia.</p>
+          <div className="flex gap-6">
+            <a href="#story" className="hover:text-[#8d4a39]">Privacy</a>
+            <a href="#story" className="hover:text-[#8d4a39]">Terms</a>
           </div>
         </div>
       </div>
