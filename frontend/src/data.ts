@@ -1,97 +1,179 @@
 import { Category, Product, Review } from "@/types";
 
-/**
- * Local showcase data. Used only when the live Supabase catalog cannot be
- * reached, so the storefront still works instead of showing a blocking error.
- */
-export const FALLBACK_PRODUCTS: Product[] = [
+export interface RunwayLookMeta {
+  lookNumber: number;
+  event: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  model: string;
+  modelPosition: string;
+  silhouetteNote: string;
+}
+
+export const RUNWAY_LOOKS_META: RunwayLookMeta[] = [
   {
-    id: "sample-1",
-    name: "Signature Silk Gift Box",
-    description: "A hand-finished keepsake box lined with silk, perfect for birthdays and anniversaries.",
-    price: 189,
-    category: "Gift Boxes",
-    image: "/product-1.svg",
-    rating: 5,
-    reviews: 42,
-    stock: 24,
-    event: "Birthday",
-    created_at: "2026-04-18T10:00:00.000Z",
+    lookNumber: 1,
+    event: "Look 01",
+    title: "Look 01",
+    subtitle: "The Kemis Heirloom",
+    description: "A modern heirloom in ivory handwoven cotton with warm terracotta-gold Tibeb.",
+    model: "/runway-models/ethiopian-look-01.png",
+    modelPosition: "center top",
+    silhouetteNote: "Hand-loomed shemma cotton with draped Netela.",
   },
   {
-    id: "sample-2",
-    name: "Midnight Rose Perfume",
-    description: "An elegant floral fragrance presented in a faceted glass flacon.",
-    price: 245,
-    category: "Personalized",
-    image: "/product-2.svg",
-    rating: 4.8,
-    reviews: 31,
-    stock: 12,
-    event: "Anniversary",
-    created_at: "2026-04-14T10:00:00.000Z",
+    lookNumber: 2,
+    event: "Look 02",
+    title: "Look 02",
+    subtitle: "Olive Tilet Study",
+    description: "Crisp ivory cotton accented by olive-green and gold geometric Tibeb cuffs.",
+    model: "/runway-models/ethiopian-look-02.png",
+    modelPosition: "center top",
+    silhouetteNote: "Tailored cuff sleeves and woven skirt hem.",
   },
   {
-    id: "sample-3",
-    name: "Blossom Bouquet",
-    description: "A curated arrangement of seasonal blooms wrapped in artisan paper.",
-    price: 96,
-    category: "Flowers",
-    image: "/product-3.svg",
-    rating: 4.9,
-    reviews: 58,
-    stock: 30,
-    event: "Wedding",
-    created_at: "2026-04-10T10:00:00.000Z",
+    lookNumber: 3,
+    event: "Look 03",
+    title: "Look 03",
+    subtitle: "Addis Tailoring",
+    description: "Tailored two-piece ivory suit finished with an olive-gold woven collar.",
+    model: "/runway-models/ethiopian-look-03.png",
+    modelPosition: "center top",
+    silhouetteNote: "Cropped architectural jacket & wide-leg trousers.",
   },
   {
-    id: "sample-4",
-    name: "Heritage Gold Watch",
-    description: "A timeless timepiece with a brushed gold case and Italian leather strap.",
-    price: 420,
-    category: "Jewelry",
-    image: "/product-4.svg",
-    rating: 4.7,
-    reviews: 19,
-    stock: 6,
-    event: "Corporate",
-    created_at: "2026-04-05T10:00:00.000Z",
+    lookNumber: 4,
+    event: "Look 04",
+    title: "Look 04",
+    subtitle: "Indigo Structure",
+    description: "Structured ivory tailoring layered over deep indigo and gold Tibeb trim.",
+    model: "/runway-models/ethiopian-look-04.png",
+    modelPosition: "center top",
+    silhouetteNote: "Sharp lapel blazer paired with woven skirt.",
   },
   {
-    id: "sample-5",
-    name: "Artisan Chocolate Collection",
-    description: "Twenty-four handcrafted pralines in a foil-stamped gift portfolio.",
-    price: 78,
-    category: "Gift Boxes",
-    image: "/product-5.svg",
-    rating: 4.9,
-    reviews: 87,
-    stock: 45,
-    event: "Valentine's Day",
-    created_at: "2026-03-29T10:00:00.000Z",
+    lookNumber: 5,
+    event: "Look 05",
+    title: "Look 05",
+    subtitle: "Asymmetric Shemma",
+    description: "One-shoulder ivory cotton dress paired with a woven crimson Mesob tote.",
+    model: "/runway-models/ethiopian-look-05.png",
+    modelPosition: "center top",
+    silhouetteNote: "Fluid asymmetric drape and basketry craft.",
   },
   {
-    id: "sample-6",
-    name: "Executive Leather Satchel",
-    description: "Full-grain leather with brass detailing, made to be carried for years.",
-    price: 310,
-    category: "Corporate",
-    image: "/product-6.svg",
-    rating: 4.6,
-    reviews: 14,
-    stock: 9,
-    event: "Graduation",
-    created_at: "2026-03-22T10:00:00.000Z",
+    lookNumber: 6,
+    event: "Look 06",
+    title: "Look 06",
+    subtitle: "Menen Diamond Weave",
+    description: "Deep indigo pleated couture featuring intricate gold and ivory diamond Tibeb.",
+    model: "/runway-models/ethiopian-look-06.png",
+    modelPosition: "center top",
+    silhouetteNote: "Full-skirted indigo jacquard weaving.",
+  },
+  {
+    lookNumber: 7,
+    event: "Look 07",
+    title: "Look 07",
+    subtitle: "Nocturne Pleats",
+    description: "Sculptural charcoal evening gown cinched with a metallic woven belt.",
+    model: "/runway-models/ethiopian-look-07.png",
+    modelPosition: "center top",
+    silhouetteNote: "Sheer black silk Netela and pleated drape.",
+  },
+  {
+    lookNumber: 8,
+    event: "Look 08",
+    title: "Look 08",
+    subtitle: "Ceremonial Crimson",
+    description: "Regal ivory Habesha Kemis woven with crimson, emerald, and gold Tibeb.",
+    model: "/runway-models/ethiopian-look-08.png",
+    modelPosition: "center top",
+    silhouetteNote: "Celebratory ceremonial border woven by hand.",
   },
 ];
 
+const FALLBACK_PIECE_DEFINITIONS: Record<
+  string,
+  [name: string, price: number, category: string, image: string][]
+> = {
+  "Look 01": [
+    ["Kemis Embroidered Jacket", 165, "Outerwear", "/pieces/piece-jacket-brown.png"],
+    ["Netela Woven Shawl", 95, "Shawls", "/pieces/piece-shawl-ivory.png"],
+    ["Terracotta Border Skirt", 185, "Skirts", "/pieces/piece-skirt-brown.png"],
+  ],
+  "Look 02": [
+    ["Olive Cuff Cotton Blouse", 145, "Tops", "/pieces/piece-blouse-olive.png"],
+    ["Olive Hem Midi Skirt", 175, "Skirts", "/pieces/piece-skirt-olive.png"],
+    ["Tilet Border Gown", 240, "Dresses", "/pieces/piece-dress-olive.png"],
+  ],
+  "Look 03": [
+    ["Tibeb Collar Tunic Jacket", 195, "Outerwear", "/pieces/piece-jacket-ivory.png"],
+    ["Wide-Leg Cotton Trousers", 155, "Trousers", "/pieces/piece-trousers-ivory.png"],
+    ["Woven Trim Clutch", 115, "Accessories", "/pieces/piece-bag-ivory.png"],
+  ],
+  "Look 04": [
+    ["Navy Trim Cropped Top", 125, "Tops", "/pieces/piece-top-navy-trim.png"],
+    ["Tailored Tibeb Blazer", 220, "Outerwear", "/pieces/piece-blazer-ivory.png"],
+    ["Indigo Border Mini Skirt", 160, "Skirts", "/pieces/piece-skirt-navy-trim.png"],
+  ],
+  "Look 05": [
+    ["One-Shoulder Shemma Dress", 260, "Dresses", "/pieces/piece-dress-oneshoulder.png"],
+    ["Mesob Crimson Basket Tote", 180, "Accessories", "/pieces/piece-bag-red.png"],
+    ["Hand-Strung Beaded Necklace", 85, "Jewelry", "/pieces/piece-necklace-beaded.png"],
+  ],
+  "Look 06": [
+    ["Indigo Diamond Weave Shawl", 135, "Shawls", "/pieces/piece-shawl-indigo.png"],
+    ["Navy & Gold Pleated Skirt", 195, "Skirts", "/pieces/piece-skirt-indigo.png"],
+    ["Artisan Silver Pendant", 90, "Jewelry", "/pieces/piece-necklace-silver.png"],
+  ],
+  "Look 07": [
+    ["Charcoal Pleated Evening Gown", 310, "Dresses", "/pieces/piece-dress-black.png"],
+    ["Braided Gold & Leather Belt", 95, "Accessories", "/pieces/piece-belt-gold.png"],
+    ["Sheer Silk Evening Netela", 110, "Shawls", "/pieces/piece-shawl-black.png"],
+  ],
+  "Look 08": [
+    ["Crimson Heritage Kemis Gown", 290, "Dresses", "/pieces/piece-dress-crimson.png"],
+    ["Woven Crimson Crossbody Bag", 145, "Accessories", "/pieces/piece-bag-crimson.png"],
+    ["Gold Filigree Drop Earrings", 80, "Jewelry", "/pieces/piece-earrings-gold.png"],
+  ],
+};
+
+/**
+ * Local showcase data used when the live API cannot be reached.
+ */
+export const FALLBACK_PRODUCTS: Product[] = RUNWAY_LOOKS_META.flatMap((look, lookIndex) => {
+  const pieces = FALLBACK_PIECE_DEFINITIONS[look.event] || [];
+  return pieces.map(([name, price, category, image], pieceIndex) => ({
+    id: `runway-${lookIndex + 1}-${pieceIndex + 1}`,
+    name,
+    description: `${look.description} Handwoven in Addis Ababa.`,
+    price,
+    category,
+    image,
+    rating: 5,
+    reviews: 8 + lookIndex,
+    stock: 6,
+    event: look.event,
+    created_at: new Date(Date.UTC(2026, 3, 20 - lookIndex)).toISOString(),
+  }));
+});
+
 export const FALLBACK_CATEGORIES: Category[] = [
-  { id: "sample-cat-1", name: "Gift Boxes", created_at: "2026-01-01T00:00:00.000Z" },
-  { id: "sample-cat-2", name: "Personalized", created_at: "2026-01-01T00:00:00.000Z" },
-  { id: "sample-cat-3", name: "Flowers", created_at: "2026-01-01T00:00:00.000Z" },
-  { id: "sample-cat-4", name: "Jewelry", created_at: "2026-01-01T00:00:00.000Z" },
-  { id: "sample-cat-5", name: "Corporate", created_at: "2026-01-01T00:00:00.000Z" },
-];
+  "Dresses",
+  "Outerwear",
+  "Tops",
+  "Skirts",
+  "Trousers",
+  "Shawls",
+  "Accessories",
+  "Jewelry",
+].map((name, index) => ({
+  id: `cat-${index + 1}`,
+  name,
+  created_at: "2026-01-01T00:00:00.000Z",
+}));
 
 export const FALLBACK_REVIEWS: Review[] = [
   {
@@ -99,17 +181,19 @@ export const FALLBACK_REVIEWS: Review[] = [
     userName: "Selamawit Tadesse",
     userImage: "/avatar-1.svg",
     rating: 5,
-    comment: "The Signature Silk Gift Box surpassed all my expectations. The presentation was flawless!",
+    comment: "The Kemis Embroidered Jacket and Netela Shawl arrived beautifully packed. The handwoven Tibeb border is extraordinary.",
     date: "2 days ago",
-    productName: "Signature Silk Gift Box",
+    productName: "Kemis Embroidered Jacket",
+    created_at: "2026-04-16T10:00:00.000Z",
   },
   {
     id: "sample-r2",
     userName: "Dawit Girma",
     userImage: "/avatar-2.svg",
     rating: 5,
-    comment: "I ordered the Executive Leather Satchel for my father's birthday. The quality is exceptional.",
+    comment: "Ordered the Tailored Tibeb Blazer for a family celebration—impeccable cotton weight and tailoring.",
     date: "1 week ago",
-    productName: "Executive Leather Satchel",
+    productName: "Tailored Tibeb Blazer",
+    created_at: "2026-04-11T10:00:00.000Z",
   },
 ];
