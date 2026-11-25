@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase, subscribeToProducts, subscribeToCategories, getAllProducts, getCategories, createCategory, deleteProduct as deleteProductFromDB, createProduct, updateProduct, uploadProductImage } from "@/lib/supabase";
+import { supabase, subscribeToProducts, subscribeToCategories, getAllProducts, getCategories, createCategory, deleteProduct as deleteProductFromDB, createProduct, updateProduct, uploadProductImage, friendlyErrorMessage } from "@/lib/supabase";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const EVENT_TYPES = [
@@ -51,8 +51,8 @@ export function AdminDashboard() {
       setOrders(ordersRes.data || []);
       setProducts(productsData);
       setCategories(categoriesData);
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error) {
+      toast.error(friendlyErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -63,8 +63,8 @@ export function AdminDashboard() {
     const prodSub = subscribeToProducts(() => fetchData());
     const catSub = subscribeToCategories(() => fetchData());
     return () => {
-      supabase.removeChannel(prodSub);
-      supabase.removeChannel(catSub);
+      if (prodSub) supabase.removeChannel(prodSub);
+      if (catSub) supabase.removeChannel(catSub);
     };
   }, []);
 
