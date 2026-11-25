@@ -8,7 +8,7 @@ An Ethiopian couture storefront built with React, TypeScript, Vite, Tailwind CSS
 - Shopping cart and quick product views
 - Customer accounts, order history and checkout
 - Staff and admin dashboards for orders, inventory, categories and image uploads
-- Persistent data: accounts, sessions, products, orders and stock live in `server/data/store.db`
+- Persistent data: accounts, sessions, products, orders and stock live in `backend/data/store.db`
 - Offline showcase: if the API cannot be reached, the shop displays a local sample collection with a retry option instead of an error screen
 
 ## Getting started
@@ -46,13 +46,13 @@ npm start
 
 ## Data and configuration
 
-- SQLite database: `server/data/store.db` (created and seeded on first run)
-- Uploaded product images: `server/uploads/`
+- SQLite database: `backend/data/store.db` (created and seeded on first run)
+- Uploaded product images: `backend/uploads/`
 - Optional environment overrides:
-  - `API_PORT` — API port when running `node server/index.js` directly (default `3101`)
+  - `API_PORT` — API port when running `node backend/index.js` directly (default `3101`)
   - `VITE_API_URL` — absolute API origin for a split frontend/API deployment (default: same origin)
 
-Both `server/data` and `server/uploads` are git-ignored, so each checkout starts with a clean seeded catalog.
+Both `backend/data` and `backend/uploads` are git-ignored, so each checkout starts with a clean seeded catalog.
 
 ## Scripts
 
@@ -70,17 +70,27 @@ Both `server/data` and `server/uploads` are git-ignored, so each checkout starts
 ## Project structure
 
 ```
-server/
-├── index.js          # HTTP API, auth, SQLite schema, seeding and static serving
-src/
-├── components/       # UI, layout and shop components
-├── constants/        # Editorial copy and asset references
-├── context/          # Auth and cart providers
-├── data.ts           # Local showcase data used as an offline fallback
-├── lib/              # Local API client and data helpers
-├── pages/            # Storefront and dashboard routes
-└── types.ts          # Shared domain types
-public/               # Locally hosted logo and illustration assets
-design-preview.html   # Static visual reference kept for design review
-supabase/functions/   # Legacy Stripe checkout edge function (not used by the local backend)
+.
+├── backend/
+│   └── index.js              # HTTP API, auth and SQLite
+├── frontend/
+│   ├── public/               # Static assets and runway page
+│   ├── src/
+│   │   ├── components/
+│   │   ├── constants/
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   ├── data.ts
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   └── types.ts
+│   ├── design-preview.html
+│   ├── index.html
+│   └── vite.config.ts
+└── supabase/
+    └── functions/            # Legacy Stripe checkout edge function
 ```
+
+The root `package.json` and TypeScript solution config orchestrate the frontend and backend.
