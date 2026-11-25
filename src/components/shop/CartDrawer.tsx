@@ -7,6 +7,8 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { supabase, friendlyErrorMessage } from "@/lib/supabase";
 import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, PackageOpen, ExternalLink, CreditCard, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -19,26 +21,61 @@ import { Label } from "@/components/ui/label";
 
 export function CartDrawer({ children }: { children: React.ReactNode }) {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "card">("cod");
 
-  const handleCheckout = () => {
-    if (cart.length === 0) return;
-    
-    setOpen(false);
-    toast.promise(
-      new Promise((resolve) => setTimeout(resolve, 2000)),
-      {
-        loading: 'Creating your order...',
-        success: (data: any) => `Order placed successfully using ${paymentMethod === 'cod' ? 'Cash on Delivery' : 'Card'}!`,
-        error: 'Error processing order.',
-      }
-    );
-    setTimeout(() => {
-        clearCart();
-        navigate('/dashboard');
-    }, 2100);
+  const handleCheckout = async () => {
+    if (cart.length === 0 || isProcessing) return;
+
+    if (!isAuthenticated) {
+      setOpen(false);
+      toast.error("Please sign in to place your order");
+      navigate("/cart");
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      const { data: order, error: orderError } = await supabase
+        .from("orders")
+        .insert({
+          user_id: user?.id,
+          total_price: cartTotal,
+          status: "pending",
+          payment_status: "unpaid",
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      const { error: itemsError } = await supabase.from("order_items").insert(
+        cart.map((item) => ({
+          order_id: order.id,
+          product_id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      );
+
+      if (itemsError) throw itemsError;
+
+      setOpen(false);
+      clearCart();
+      toast.success(
+        paymentMethod === "cod"
+          ? "Order placed successfully! Cash on Delivery."
+          : "Order placed successfully!",
+      );
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(friendlyErrorMessage(error));
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const goToCart = () => {
@@ -179,6 +216,7 @@ export function CartDrawer({ children }: { children: React.ReactNode }) {
               
               <Button 
                 onClick={handleCheckout}
+                disabled={isProcessing}
                 className="w-full h-14 font-black gap-2 rounded-2xl shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all text-base"
               >
                 Place Order <ArrowRight className="w-5 h-5" />
