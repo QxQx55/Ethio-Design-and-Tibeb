@@ -1,17 +1,14 @@
-import { createClient, RealtimeChannel } from '@supabase/supabase-js';
 import { Profile, UserRole, Product, Category, Review } from '../types';
+import { localClient, isLocalBackend, LocalChannelType, toErrorShape } from './localClient';
 
-// Prefer environment variables; the built-in values keep the demo store usable
-// until a project-specific Supabase instance is configured in .env.local.
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://mnwtsoidxujpwdgvkzpv.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ud3Rzb2lkeHVqcHdkZ3ZrenB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MDE2MjksImV4cCI6MjA5MjA3NzYyOX0.zUeRB3yw1iTZb9GmomJZJTGMaoafZ1vZQKWG0A_jsKI';
+// The storefront talks to the bundled Node/SQLite backend (see server/index.js),
+// which exposes the same data shape the Supabase helpers used to return.
+export const isSupabaseConfigured = isLocalBackend;
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = localClient;
 
 /** Reject a hanging request instead of leaving the UI stuck on a spinner. */
-const withTimeout = <T>(request: PromiseLike<T>, ms = 10000): Promise<T> =>
+const withTimeout = <T>(request: PromiseLike<T>, ms = 15000): Promise<T> =>
   new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error('Request timed out. Please try again.')), ms);
     Promise.resolve(request).then(
@@ -21,11 +18,11 @@ const withTimeout = <T>(request: PromiseLike<T>, ms = 10000): Promise<T> =>
   });
 
 const errorText = (error: unknown) =>
-  error instanceof Error ? error.message : String(error ?? '');
+  error instanceof Error ? error.message : String((error as any)?.message ?? error ?? '');
 
 /** Network failures surface as a bare "TypeError: Failed to fetch" in browsers. */
 export const isNetworkError = (error: unknown) =>
-  /failed to fetch|networkerror|network request failed|load failed|fetch failed|offline|timed out|timeout/i.test(errorText(error));
+  /failed to fetch|networkerror|network request failed|load failed|fetch failed|offline|timed out|timeout|unable to reach/i.test(errorText(error));
 
 export const friendlyErrorMessage = (error: unknown) =>
   isNetworkError(error)
@@ -85,21 +82,15 @@ export const uploadProductImage = async (file: File) => {
     const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
     const filePath = `products/${fileName}`;
 
-    const { error: uploadError } = await withTimeout(supabase.storage
+    const { error: uploadError } = await withTimeout(localClient.storage
       .from('product-images')
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false
-      }));
+      .upload(filePath, file));
 
     if (uploadError) {
-      if (uploadError.message.includes('bucket not found')) {
-        throw new Error('Storage bucket "product-images" not found. Please create it in your Supabase dashboard.');
-      }
-      throw uploadError;
+      throw new Error(uploadError.message);
     }
 
-    const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
+    const { data } = localClient.storage.from('product-images').getPublicUrl(filePath);
     return data.publicUrl;
   } catch (error) {
     console.error('Error uploading image:', error);
@@ -169,14 +160,14 @@ export const createCategory = async (name: string) => {
   return data as Category;
 };
 
-const subscribe = (table: string, callback: () => void): RealtimeChannel | null => {
+const subscribe = (table: string, callback: () => void): LocalChannelType | null => {
   if (!isSupabaseConfigured) return null;
 
   try {
     const channelId = `${table}-realtime-${Math.random().toString(36).substring(2, 10)}`;
     return supabase
       .channel(channelId)
-      .on('postgres_changes', { event: '*', schema: 'public', table }, callback)
+      .on('postgres_changes', { table }, callback)
       .subscribe();
   } catch (error) {
     console.warn(`Could not subscribe to ${table} updates:`, friendlyErrorMessage(error));
@@ -187,3 +178,5 @@ const subscribe = (table: string, callback: () => void): RealtimeChannel | null 
 export const subscribeToProducts = (callback: () => void) => subscribe('products', callback);
 
 export const subscribeToCategories = (callback: () => void) => subscribe('categories', callback);
+
+export { toErrorShape };
