@@ -92,7 +92,7 @@ export function CartPage() {
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">Your cart is empty</h3>
                 <p className="text-muted-foreground max-w-sm mx-auto mb-8 text-lg">
-                  It looks like you haven't added any gifts yet. Explore our collection to find something special!
+                  It looks like you haven't added anything yet. Explore the collection to find a piece you love.
                 </p>
                 <Link to="/">
                   <Button size="lg" className="rounded-full px-10 h-14 text-lg">
@@ -227,7 +227,7 @@ export function CartPage() {
                     <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 flex-shrink-0">
                         <PackageOpen className="w-5 h-5" />
                     </div>
-                    <p>Free premium gift packaging included on all orders today!</p>
+                    <p>Complimentary packaging is included with every order.</p>
                   </div>
                 </div>
               </div>
